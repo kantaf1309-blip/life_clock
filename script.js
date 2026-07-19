@@ -1371,6 +1371,27 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAppleModal('book-modal');
     });
 
+    // Hide on scroll down, show on scroll up for nav-bar
+    let lastScrollY = window.scrollY;
+    const navBar = document.getElementById('top-nav-bar');
+    
+    window.addEventListener('scroll', () => {
+        if (!navBar) return;
+        const currentScrollY = window.scrollY;
+        
+        // Don't hide when near the top (e.g. bounce effect on iOS)
+        if (currentScrollY < 50) {
+            navBar.classList.remove('nav-hidden');
+        } else if (currentScrollY > lastScrollY) {
+            // Scrolling down
+            navBar.classList.add('nav-hidden');
+        } else {
+            // Scrolling up
+            navBar.classList.remove('nav-hidden');
+        }
+        lastScrollY = currentScrollY;
+    }, { passive: true });
+
     // Initialize
     renderKanban();
     renderHabits();

@@ -2776,17 +2776,22 @@ details.completed-dreams-accordion .kanban-list {
 /* ================================================ */
 @media (max-width: 600px) {
     .nav-bar {
-        position: sticky !important;
+        position: fixed !important;
         top: 0 !important;
         z-index: 1000 !important;
         background: var(--bg-main) !important;
         padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
         border-bottom: none !important;
         width: 100% !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .nav-bar.nav-hidden {
+        transform: translateY(-100%);
     }
     
     body {
-        padding-top: 0 !important;
+        padding-top: calc(70px + env(safe-area-inset-top, 0px)) !important;
         flex-direction: column;
     }
 }
