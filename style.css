@@ -2776,7 +2776,9 @@ details.completed-dreams-accordion .kanban-list {
 /* ================================================ */
 @media (max-width: 600px) {
     .nav-bar {
-        position: relative !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
         background: var(--bg-main) !important;
         padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
         border-bottom: none !important;
