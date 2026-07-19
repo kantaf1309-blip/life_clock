@@ -1,50 +1,77 @@
 :root {
-    --bg-color: #0b0e14;
-    --card-bg: rgba(22, 27, 34, 0.6);
-    --text-primary: #ffffff;
-    --text-secondary: #8b949e;
-    --accent-color: #FFD700;
-    --accent-glow: rgba(255, 215, 0, 0.4);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --completed-color: #484f58;
-    --danger-color: #f85149;
-    --success-color: #2ea043;
-    --glass-blur: blur(20px);
+    /* iOS System Light Mode Colors */
+    --bg-main: #F2F2F7;
+    --bg-card: #FFFFFF;
+    --bg-modal: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #8E8E93;
+    --border-color: rgba(60, 60, 67, 0.18);
+    
+    /* System Accents */
+    --sys-blue: #007AFF;
+    --sys-green: #34C759;
+    --sys-orange: #FF9500;
+    --sys-red: #FF3B30;
+    --sys-purple: #AF52DE;
+    --sys-yellow: #FFCC00;
+    
+    /* Kanban / Category Colors */
+    --cat-career: #007AFF;
+    --cat-growth: #34C759;
+    --cat-family: #FF3B30;
+    --cat-health: #32ADE6;
+    --cat-mind: #AF52DE;
+    --cat-hobbies: #FF9500;
+    --cat-wealth: #FFCC00;
+    --cat-uncategorized: #8E8E93;
 
-    /* Category Colors (Kanban) */
-    --cat-career: #3b82f6;
-    --cat-growth: #10b981;
-    --cat-family: #f43f5e;
-    --cat-health: #22c55e;
-    --cat-mind: #a855f7;
-    --cat-hobbies: #f59e0b;
-    --cat-wealth: #eab308;
-    --cat-uncategorized: #6b7280;
+    /* Legacy vars used throughout */
+    --accent-color: var(--sys-blue);
+    --completed-color: #E5E5EA;
+    --danger-color: var(--sys-red);
+    --success-color: var(--sys-green);
+    --glass-blur: blur(20px);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* iOS System Dark Mode Colors */
+        --bg-main: #000000;
+        --bg-card: #1C1C1E;
+        --bg-modal: #1C1C1E;
+        --text-primary: #FFFFFF;
+        --text-secondary: #EBEBF5; /* Secondary is 60% opacity of this usually */
+        --border-color: rgba(84, 84, 88, 0.65);
+        
+        /* System Accents */
+        --sys-blue: #0A84FF;
+        --sys-green: #30D158;
+        --sys-orange: #FF9D0B;
+        --sys-red: #FF453A;
+        --sys-purple: #BF5AF2;
+        --sys-yellow: #FFD60A;
+
+        --completed-color: #3A3A3C;
+    }
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-}
-
-@keyframes aurora {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background: linear-gradient(135deg, #0b0e14, #1a202c, #0d1636, #1b0d36, #0b0e14);
-    background-size: 400% 400%;
-    animation: aurora 25s ease infinite;
+    background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 1.5rem 1rem 120px 1rem;
+    padding: 80px 0 120px 0; /* Space for top nav and bottom tab */
+    overflow-x: hidden;
 }
 
 .container {
@@ -84,11 +111,11 @@ h1 {
 }
 
 .life-clock-glass {
-    background: rgba(22, 27, 34, 0.35);
+    background: var(--bg-card);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 28px;
     padding: 2.5rem 2rem 1.5rem;
     width: 100%;
@@ -132,7 +159,7 @@ h1 {
 
 .ring-bg {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.06);
+    stroke: var(--border-color);
     stroke-width: 5;
 }
 
@@ -161,14 +188,14 @@ h1 {
 .ring-age {
     font-size: 2.8rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary);
     font-variant-numeric: tabular-nums;
     letter-spacing: -1px;
 }
 
 .ring-age-label {
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
     letter-spacing: 2px;
     margin-top: 2px;
 }
@@ -176,7 +203,7 @@ h1 {
 .ring-age-decimal {
     font-size: 0.65rem;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
     margin-top: 3px;
     letter-spacing: 0.5px;
@@ -185,7 +212,7 @@ h1 {
 /* --- Remaining Time Label --- */
 .clock-remaining-label {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 4px;
     margin-bottom: 0.8rem;
@@ -207,8 +234,8 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
     border-radius: 14px;
     padding: 0.7rem 0.6rem 0.5rem;
     min-width: 56px;
@@ -216,13 +243,13 @@ h1 {
 }
 
 .digit-card:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--border-color);
 }
 
 .digit-value {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     font-variant-numeric: tabular-nums;
     line-height: 1;
     letter-spacing: -0.5px;
@@ -230,7 +257,7 @@ h1 {
 
 .digit-label {
     font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--text-secondary);
     margin-top: 6px;
     letter-spacing: 1px;
 }
@@ -238,7 +265,7 @@ h1 {
 /* --- Progress Bar --- */
 .clock-progress-container {
     height: 3px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--border-color);
     border-radius: 2px;
     overflow: hidden;
     margin-bottom: 0.6rem;
@@ -259,7 +286,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--text-secondary);
     position: relative;
     z-index: 1;
     font-variant-numeric: tabular-nums;
@@ -396,7 +423,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .plan-select {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     color: var(--text-primary);
@@ -412,7 +439,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .dream-form input {
     flex: 1;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1rem 1.2rem;
@@ -529,10 +556,10 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    background: rgba(22, 27, 34, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     overflow: hidden;
     transition: box-shadow 0.3s ease;
@@ -551,7 +578,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     font-weight: 700;
     font-size: 0.95rem;
     letter-spacing: 0.03em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--border-color);
     position: relative;
 }
 
@@ -559,11 +586,12 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: var(--col-color, rgba(255,255,255,0.1));
+    background: var(--col-color, var(--border-color));
 }
 
 .kanban-column-header .col-count {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--border-color);
+    color: var(--text-secondary);
     padding: 0.1rem 0.5rem;
     border-radius: 10px;
     font-size: 0.75rem;
@@ -690,12 +718,12 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-card.child-card {
     margin-left: 1rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid var(--border-color);
+    background: transparent;
 }
 
 .kanban-card.child-card .step-icon {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-secondary);
     font-size: 0.85rem;
     flex-shrink: 0;
 }
@@ -707,17 +735,17 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .completed-accordion-btn {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
     text-align: center;
     padding: 0.5rem;
     margin-top: 1rem;
     cursor: pointer;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    border-top: 1px dashed var(--border-color);
     transition: color 0.2s ease;
 }
 
 .completed-accordion-btn:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-primary);
 }
 
 .completed-list {
@@ -744,7 +772,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .kanban-add-btn {
     width: 100%;
     background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border: 1px dashed var(--border-color);
     border-radius: 8px;
     color: var(--text-secondary);
     padding: 0.5rem;
@@ -754,9 +782,9 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .kanban-add-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-main);
     color: var(--text-primary);
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -832,18 +860,20 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .dream-card {
-    background: var(--card-bg);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     padding: 1.2rem;
     margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .dream-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(255,255,255,0.15);
+    border-color: var(--sys-blue);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .dream-card-image {
@@ -966,9 +996,9 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .modal-content {
-    background: rgba(30, 30, 30, 0.85); /* Slightly transparent dark */
+    background: var(--bg-modal);
     backdrop-filter: blur(20px) saturate(180%);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid var(--border-color);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px 24px 0 0; /* Rounded top corners only */
@@ -996,7 +1026,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .modal-drag-handle {
     width: 40px;
     height: 5px;
-    background: rgba(255,255,255,0.3);
+    background: var(--border-color);
     border-radius: 3px;
     margin: 0 auto 1.5rem auto;
     cursor: grab;
@@ -1028,7 +1058,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .modal-field select,
 .modal-field textarea {
     width: 100%;
-    background: rgba(0,0,0,0.3);
+    background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.7rem 0.9rem;
@@ -1087,12 +1117,13 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .modal-btn-secondary {
-    background: rgba(255,255,255,0.1);
+    background: var(--bg-main);
     color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .modal-btn-secondary:hover {
-    background: rgba(255,255,255,0.15);
+    background: var(--border-color);
 }
 
 /* ---------------------------------------------------- */
@@ -1117,7 +1148,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .icon-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-main);
     color: var(--text-primary);
 }
 
@@ -1163,7 +1194,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .timeline-item {
     position: relative;
-    background: var(--card-bg);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.2rem;
@@ -1313,7 +1344,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .dwmy-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--sys-blue);
 }
 
 .dwmy-item.checked {
@@ -1699,7 +1730,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .book-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--sys-blue);
 }
 
 .book-header {
@@ -1849,28 +1880,28 @@ details.completed-dreams-accordion {
 }
 details.completed-dreams-accordion summary {
     font-size: 0.9rem;
-    color: rgba(255,255,255,0.5);
+    color: var(--text-secondary);
     outline: none;
     user-select: none;
     cursor: pointer;
     padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-main);
     border-radius: 12px;
     transition: all 0.3s ease;
     text-align: center;
-    border: 1px dashed rgba(255,255,255,0.1);
+    border: 1px dashed var(--border-color);
 }
 details.completed-dreams-accordion summary:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255,255,255,0.8);
+    background: var(--border-color);
+    color: var(--text-primary);
 }
 details.completed-dreams-accordion .kanban-list {
     margin-top: 1rem;
     min-height: auto;
     padding: 0.5rem;
-    background: rgba(0,0,0,0.15);
+    background: transparent;
     border-radius: 12px;
-    border: 1px inset rgba(255,255,255,0.02);
+    border: 1px inset var(--border-color);
 }
 
 /* ================================================ */
@@ -1908,12 +1939,12 @@ details.completed-dreams-accordion .kanban-list {
     font-size: 1.15rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: rgba(255,255,255,0.95);
+    color: var(--text-primary);
     transition: all 0.3s ease;
 }
 .habit-item.completed .habit-text {
     text-decoration: line-through;
-    color: rgba(255,255,255,0.4);
+    color: var(--text-secondary);
 }
 .habit-goal-badge {
     font-size: 0.75rem;
@@ -1976,7 +2007,7 @@ details.completed-dreams-accordion .kanban-list {
     line-height: 22px;
     font-size: 0.85rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.7);
+    color: var(--text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2017,7 +2048,7 @@ details.completed-dreams-accordion .kanban-list {
     top: 24px;
     width: 12px;
     height: 2px;
-    background: rgba(255,255,255,0.2);
+    background: var(--border-color);
 }
 .dream-card.is-child::after {
     content: '';
@@ -2026,26 +2057,26 @@ details.completed-dreams-accordion .kanban-list {
     top: -20px; /* Connects upward to parent */
     width: 2px;
     height: 44px;
-    background: rgba(255,255,255,0.2);
+    background: var(--border-color);
 }
 
 .dream-card.drop-target-parent {
     border: 2px dashed var(--accent-color);
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(255,107,107,0.4);
-    background: rgba(255,255,255,0.05);
+    background: var(--bg-main);
 }
 
 details.completed-dreams-accordion {
     margin-top: 1rem;
     padding: 0.5rem;
-    background: rgba(0,0,0,0.2);
+    background: var(--bg-main);
     border-radius: 8px;
     cursor: pointer;
 }
 details.completed-dreams-accordion summary {
     font-size: 0.9rem;
-    color: rgba(255,255,255,0.7);
+    color: var(--text-secondary);
     outline: none;
     user-select: none;
 }
@@ -2055,8 +2086,8 @@ details.completed-dreams-accordion .kanban-list {
 }
 
 .add-dream-in-col-btn:hover {
-    background: rgba(255,255,255,0.1) !important;
-    border-color: rgba(255,255,255,0.4) !important;
+    background: var(--border-color) !important;
+    border-color: var(--text-secondary) !important;
 }
 
 /* ========================================= */
@@ -2064,9 +2095,9 @@ details.completed-dreams-accordion .kanban-list {
 /* ========================================= */
 .bookshelf-container {
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
     box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
     min-height: 400px;
     position: relative;
@@ -2127,9 +2158,10 @@ details.completed-dreams-accordion .kanban-list {
 
 /* Front side */
 .book-flip-card-front {
-    background-color: #2a2a2a;
+    background-color: var(--bg-card);
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--border-color);
 }
 
 .book-flip-card-front img {
@@ -2168,10 +2200,10 @@ details.completed-dreams-accordion .kanban-list {
 
 /* Back side */
 .book-flip-card-back {
-    background: rgba(30, 30, 30, 0.95);
+    background: var(--bg-card);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     transform: rotateY(180deg);
     display: flex;
     flex-direction: column;
@@ -2194,15 +2226,15 @@ details.completed-dreams-accordion .kanban-list {
 
 .book-back-author {
     font-size: 0.8rem;
-    color: rgba(255,255,255,0.6);
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
 
 .book-back-memo-input {
     width: 100%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: white;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     border-radius: 4px;
     padding: 0.4rem;
     font-size: 0.8rem;
@@ -2387,4 +2419,167 @@ details.completed-dreams-accordion .kanban-list {
         margin-bottom: 2.5rem;
         margin-top: 1rem;
     }
+}
+
+/* ================================================ */
+/* iOS NATIVE REDESIGN                              */
+/* ================================================ */
+
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--bg-main); /* Fallback */
+    background: color-mix(in srgb, var(--bg-main) 85%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: env(safe-area-inset-top, 0) 16px 0;
+    z-index: 1000;
+}
+
+.nav-bar-leading, .nav-bar-trailing {
+    display: flex;
+    align-items: center;
+    min-width: 60px;
+}
+
+.nav-bar-trailing {
+    justify-content: flex-end;
+}
+
+.nav-bar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    flex: 1;
+}
+
+.nav-icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--sys-blue);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override bottom tabs for iOS style */
+.tabs {
+    background: color-mix(in srgb, var(--bg-main) 85%, transparent) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid var(--border-color) !important;
+    border-bottom: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 20px) !important;
+    height: auto !important;
+    box-shadow: none !important;
+}
+
+.tab-btn {
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+}
+
+.tab-btn.active {
+    color: var(--sys-blue) !important;
+    background: transparent !important;
+}
+
+.tab-btn.active .tab-icon {
+    transform: none !important;
+}
+
+/* Modals to Bottom Sheets */
+.modal-overlay {
+    background: rgba(0,0,0,0.4) !important;
+    backdrop-filter: none !important;
+}
+
+.modal-content {
+    position: absolute !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) translateY(100%);
+    width: 100% !important;
+    max-width: 600px !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 2rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 20px)) !important;
+    background: var(--bg-card) !important;
+    border: none !important;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1) !important;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important;
+}
+
+.modal-overlay[style*="display: flex"] .modal-content {
+    transform: translateX(-50%) translateY(0) !important;
+}
+
+/* Habit Streak & Rings */
+.habit-streak {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: var(--sys-orange);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.habit-check-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.habit-check-btn.checked {
+    background: var(--sys-blue);
+    border-color: var(--sys-blue);
+}
+
+.habit-check-btn.checked::after {
+    content: '';
+    width: 12px;
+    height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translateY(-1px);
+}
+
+.habit-item-ios {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.habit-info-ios {
+    display: flex;
+    flex-direction: column;
+}
+
+.habit-title-ios {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
 }
