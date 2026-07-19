@@ -428,6 +428,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     tabBtns.forEach(b => {
                         if (b.getAttribute('data-target') === activeId) {
                             b.classList.add('active');
+                            // Update Top Nav Title
+                            const titleEl = document.getElementById('nav-title');
+                            if (titleEl) {
+                                if (activeId === 'dreams-view') titleEl.textContent = '目標・夢リスト';
+                                else if (activeId === 'dwmy-view') titleEl.textContent = '習慣・ルーティン';
+                                else if (activeId === 'books-view') titleEl.textContent = '読書リスト';
+                            }
                         } else {
                             b.classList.remove('active');
                         }
@@ -442,6 +449,20 @@ document.addEventListener('DOMContentLoaded', () => {
         tabContents.forEach(content => observer.observe(content));
     }
 
+    // Top Add Button Logic
+    document.getElementById('top-add-btn')?.addEventListener('click', () => {
+        const activeTabBtn = document.querySelector('.tab-btn.active');
+        if (!activeTabBtn) return;
+        
+        const targetId = activeTabBtn.getAttribute('data-target');
+        if (targetId === 'dreams-view') {
+            document.getElementById('add-dream-btn')?.click();
+        } else if (targetId === 'dwmy-view') {
+            document.getElementById('add-habit-btn')?.click();
+        } else if (targetId === 'books-view') {
+            document.getElementById('add-book-btn')?.click();
+        }
+    });
     // ============================================================
     // Dreams / Kanban Management
     // ============================================================
@@ -780,192 +801,128 @@ document.addEventListener('DOMContentLoaded', () => {
     const habitModal = document.getElementById('habit-modal');
     let currentEditHabitId = null;
     
-    function getCurrentDateStr() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth() + 1).padStart(2, '0');
-        const d = String(now.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
+    function getStreak(habitId) {
+        let streak = 0;
+        let d = new Date();
+        // Check backwards from today
+        while (true) {
+            const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            if (habitLogs[dateStr] && habitLogs[dateStr][habitId]) {
+                streak++;
+                d.setDate(d.getDate() - 1);
+            } else if (streak === 0) {
+                // if today is not checked, check yesterday just in case they haven't done it yet today
+                const d2 = new Date();
+                d2.setDate(d2.getDate() - 1);
+                const yDateStr = `${d2.getFullYear()}-${String(d2.getMonth()+1).padStart(2,'0')}-${String(d2.getDate()).padStart(2,'0')}`;
+                if (habitLogs[yDateStr] && habitLogs[yDateStr][habitId]) {
+                    streak++;
+                    d = d2;
+                    d.setDate(d.getDate() - 1);
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        return streak;
     }
 
     function renderHabits() {
-        const list = document.getElementById('daily-habit-list');
-        if(!list) return;
-        list.innerHTML = '';
+        const listContainer = document.getElementById('habit-list-container');
+        const ring = document.getElementById('habit-today-ring');
+        const percentText = document.getElementById('habit-today-percent');
         
-        const todayStr = getCurrentDateStr();
-        if(!habitLogs[todayStr]) habitLogs[todayStr] = {};
-
-        // Populate dream options for habit modal
-        const dreamSelect = document.getElementById('modal-habit-dream');
-        if(dreamSelect) {
-            dreamSelect.innerHTML = '<option value="">-- 目標を選択してください --</option>';
-            dreams.filter(d => !d.completed && !d.isLocked).forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.textContent = d.text;
-                dreamSelect.appendChild(opt);
-            });
+        if(!listContainer) return;
+        listContainer.innerHTML = '';
+        
+        if(habits.length === 0) {
+            listContainer.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-secondary);">習慣が登録されていません。<br>右上の「＋」から追加しましょう。</div>';
+            if(ring) ring.style.strokeDashoffset = 283;
+            if(percentText) percentText.textContent = '0%';
+            return;
         }
 
-        let completedToday = 0;
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
         
-
-
-
+        let completedToday = 0;
         let totalActiveHabits = 0;
+
         habits.forEach(habit => {
             const dream = dreams.find(d => d.id === habit.dreamId);
             if (!dream || dream.completed || dream.isLocked) return;
             totalActiveHabits++;
 
-            const li = document.createElement('li');
-            li.className = 'habit-item';
-            const isCompleted = habitLogs[todayStr][habit.id] === true;
-            if(isCompleted) {
-                li.classList.add('completed');
-                completedToday++;
-            }
-
-            const catInfo = dream ? CATEGORIES[dream.category || 'uncategorized'] : null;
-            const badgeHtml = catInfo ? `<span class="habit-goal-badge" style="background: ${catInfo.color}40; color: ${catInfo.color}; border: 1px solid ${catInfo.color};">${catInfo.label.split(' ')[0]} ${escapeHTML(dream.text)}</span>` : '';
-
-            li.innerHTML = `
-                <div class="habit-main">
-                    <label class="checkbox-container">
-                        <input type="checkbox" class="habit-check" data-id="${habit.id}" ${isCompleted ? 'checked' : ''}>
-                        <span class="checkmark"></span>
-                    </label>
-                    <div>
-                        <div class="habit-text">${escapeHTML(habit.text)}</div>
-                        ${badgeHtml}
-                    </div>
-                </div>
-                <div class="habit-actions">
-                    <button class="icon-btn edit-habit-btn" data-id="${habit.id}">${ICON_EDIT}</button>
-                    <button class="icon-btn delete-habit-btn" data-id="${habit.id}">${ICON_DELETE}</button>
-                </div>
-            `;
-            list.appendChild(li);
-        });
-
-        // Update progress bar
-        const total = totalActiveHabits;
-        const progressFill = document.getElementById('daily-progress-fill');
-        const progressText = document.getElementById('daily-progress-text');
-        if(progressFill && progressText) {
-            const percent = total === 0 ? 0 : Math.round((completedToday / total) * 100);
-            progressFill.style.width = `${percent}%`;
-            progressText.textContent = `${completedToday} / ${total} 完了 (${percent}%)`;
-            progressFill.style.background = percent === 100 ? 'var(--success-color)' : 'var(--accent-color)';
-        }
-
-        document.querySelectorAll('.habit-check').forEach(chk => {
-            chk.addEventListener('change', (e) => {
-                const id = e.target.getAttribute('data-id');
-                habitLogs[todayStr][id] = e.target.checked;
-                saveHabits();
-                renderHabits();
-                renderHeatmap();
-            });
-        });
-        document.querySelectorAll('.edit-habit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = e.currentTarget.getAttribute('data-id');
-                const habit = habits.find(h => h.id === id);
-                if (habit) {
-                    currentEditHabitId = id;
-                    document.getElementById('habit-modal-title').textContent = '習慣を編集';
-                    document.getElementById('modal-habit-text').value = habit.text;
-                    document.getElementById('modal-habit-dream').value = id;
-                    openAppleModal('habit-modal');
-                }
-            });
-        });
-        document.querySelectorAll('.delete-habit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if(confirm('この習慣を削除しますか？')) {
-                    const id = e.currentTarget.getAttribute('data-id');
-                    habits = habits.filter(h => h.id !== id);
-                    saveHabits();
-                    renderHabits();
-                    renderHeatmap();
-                }
-            });
-        });
-        renderHeatmap();
-    }
-
-    function renderHeatmap() {
-        const grid = document.getElementById('habit-heatmap-grid');
-        if(!grid) return;
-        grid.innerHTML = '';
-        if(habits.length === 0) {
-            grid.innerHTML = '<span style="color: rgba(255,255,255,0.5);">習慣が登録されていません。</span>';
-            return;
-        }
-
-        const pastDays = 365; // Show up to 1 year
-        const dates = [];
-        for(let i = pastDays - 1; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            dates.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
-        }
-
-        const labelsCol = document.createElement('div');
-        labelsCol.style.display = 'flex';
-        labelsCol.style.flexDirection = 'column';
-        labelsCol.style.gap = '0.6rem';
-        labelsCol.style.marginRight = '1rem';
-        labelsCol.style.position = 'sticky';
-        labelsCol.style.left = '0';
-        labelsCol.style.background = 'var(--bg-color, #121212)';
-        labelsCol.style.zIndex = '10';
-        labelsCol.style.paddingRight = '10px';
-        labelsCol.style.borderRight = '1px solid rgba(255,255,255,0.1)';
-
-        const daysScrollContainer = document.createElement('div');
-        daysScrollContainer.style.display = 'flex';
-        daysScrollContainer.style.flexDirection = 'column';
-        daysScrollContainer.style.gap = '0.6rem';
-        
-        grid.style.display = 'flex';
-        grid.style.overflowX = 'auto';
-        grid.style.paddingBottom = '1rem';
-        grid.appendChild(labelsCol);
-        grid.appendChild(daysScrollContainer);
-
-        habits.forEach(habit => {
-            const dream = dreams.find(d => d.id === habit.dreamId);
-            if (!dream || dream.completed || dream.isLocked) return;
-
-            const label = document.createElement('div');
-            label.className = 'heatmap-label';
-            label.textContent = habit.text;
-            label.title = habit.text;
-            labelsCol.appendChild(label);
-
-            const daysContainer = document.createElement('div');
-            daysContainer.className = 'heatmap-days';
-            dates.forEach(dateStr => {
-                const box = document.createElement('div');
-                box.className = 'heatmap-box';
-                const isDone = habitLogs[dateStr] && habitLogs[dateStr][habit.id];
-                if(isDone) box.classList.add('active');
-                else box.classList.add('empty');
-                box.title = `${dateStr}: ${isDone ? '完了' : '未完了'}`;
-                daysContainer.appendChild(box);
-            });
-            daysScrollContainer.appendChild(daysContainer);
-        });
-        
-
+            const isDoneToday = habitLogs[todayStr] && habitLogs[todayStr][habit.id];
+            if (isDoneToday) completedToday++;
             
-        setTimeout(() => {
-            if(grid) grid.scrollLeft = grid.scrollWidth;
-        }, 50);
+            const streak = getStreak(habit.id);
+
+            const item = document.createElement('div');
+            item.className = 'habit-item-ios';
+            item.innerHTML = `
+                <div class="habit-info-ios">
+                    <div class="habit-title-ios">${escapeHTML(habit.text)}</div>
+                    ${streak > 0 ? `<div class="habit-streak">🔥 ${streak}日連続</div>` : ''}
+                </div>
+                <button class="habit-check-btn ${isDoneToday ? 'checked' : ''}" data-id="${habit.id}"></button>
+            `;
+            
+            const checkBtn = item.querySelector('.habit-check-btn');
+            checkBtn.addEventListener('click', () => {
+                if (!habitLogs[todayStr]) habitLogs[todayStr] = {};
+                
+                if (habitLogs[todayStr][habit.id]) {
+                    delete habitLogs[todayStr][habit.id];
+                    checkBtn.classList.remove('checked');
+                } else {
+                    habitLogs[todayStr][habit.id] = true;
+                    checkBtn.classList.add('checked');
+                    // Add a tiny bounce animation to the item
+                    item.style.transform = 'scale(0.97)';
+                    setTimeout(() => item.style.transform = 'scale(1)', 150);
+                }
+                
+                // Re-render ring immediately without full re-render for smooth UX
+                updateRing();
+                saveHabits();
+            });
+            
+            // Add long press / double click to edit
+            item.addEventListener('dblclick', () => {
+                currentEditHabitId = habit.id;
+                document.getElementById('modal-habit-text').value = habit.text;
+                document.getElementById('modal-habit-dream').value = habit.dreamId;
+                openAppleModal('habit-modal');
+            });
+
+            listContainer.appendChild(item);
+        });
+        
+        updateRing();
+        
+        function updateRing() {
+            let done = 0;
+            habits.forEach(h => {
+                const d = dreams.find(d => d.id === h.dreamId);
+                if (!d || d.completed || d.isLocked) return;
+                if (habitLogs[todayStr] && habitLogs[todayStr][h.id]) done++;
+            });
+            
+            const pct = totalActiveHabits === 0 ? 0 : Math.round((done / totalActiveHabits) * 100);
+            if(percentText) percentText.textContent = `${pct}%`;
+            
+            if(ring) {
+                // dasharray is 283. dashoffset = 283 is 0%, 0 is 100%
+                const offset = 283 - (283 * (pct / 100));
+                ring.style.strokeDashoffset = offset;
+            }
+        }
     }
+
+    // renderHeatmap was completely replaced by renderHabits iOS styling
 
     document.getElementById('add-habit-btn')?.addEventListener('click', () => {
         currentEditHabitId = null;
