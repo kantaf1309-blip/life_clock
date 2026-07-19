@@ -2457,16 +2457,16 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 3. Kanban & Books Grid --- */
     .kanban-board {
-        padding: 0 1rem 1rem;
-        gap: 1rem;
-        scroll-snap-type: x mandatory;
+        padding: 0 0.5rem 1rem;
+        flex-direction: column;
+        gap: 0.8rem;
     }
     
     .kanban-column {
-        min-width: 85vw;
-        max-width: 85vw;
+        min-width: 100%;
+        max-width: 100%;
         scroll-snap-align: center;
-        padding: 1rem;
+        padding: 0.5rem;
     }
     
     .bookshelf-grid {
