@@ -304,13 +304,13 @@ h1 {
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(15, 20, 25, 0.8);
+    background: var(--bg-modal);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     padding: 0.8rem 1.5rem;
     border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     z-index: 1000;
 }
 
@@ -2341,10 +2341,20 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 2. Bottom Navigation (Tabs) --- */
     .tabs {
-        bottom: env(safe-area-inset-bottom, 1rem);
-        padding: 0.6rem 1rem;
-        width: 90%;
-        max-width: 360px;
+        bottom: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        max-width: none;
+        padding: 0.6rem 1rem env(safe-area-inset-bottom, 0.6rem);
+        border-radius: 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        justify-content: space-around;
+        gap: 0;
     }
     
     .tab-btn {
