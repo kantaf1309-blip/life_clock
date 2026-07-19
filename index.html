@@ -133,14 +133,15 @@
                 <div id="dreams-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
                     <section class="dreams-section">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <h2>目標・夢リスト</h2>
-                            <div class="dream-controls" style="display: flex; gap: 10px; align-items: center;">
+                            <h2 class="section-title">GOALS & DREAMS <span class="ja-subtitle">目標・夢リスト</span></h2>
+                            <button id="add-dream-btn" class="primary-btn">＋ 新しい目標</button>
+                        </div>
+                            <div class="dream-controls" style="display: flex; gap: 10px; align-items: center; margin-bottom: 2rem;">
                                 <label style="font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; cursor: pointer;">
                                     <input type="checkbox" id="toggle-locked-dreams" checked>
                                     🔒 ロック中を隠す
                                 </label>
                             </div>
-                        </div>
 
                         <!-- Kanban Board -->
                         <div id="kanban-board" class="kanban-board hide-locked">
@@ -181,19 +182,19 @@
                 <div id="books-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
                     <section class="books-section">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <h2>📚 読書ギャラリー</h2>
-                            <button id="add-book-btn" class="primary-btn" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 20px; padding: 0.8rem 1.5rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">＋ 新しい本を登録</button>
+                            <h2 class="section-title">BOOKS <span class="ja-subtitle">読書ギャラリー</span></h2>
+                            <button id="add-book-btn" class="primary-btn" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 20px; padding: 0.8rem 1.5rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">＋ 本を登録</button>
                         </div>
 
                         <!-- Tabs for Book Status and Filter -->
-                        <div class="books-tabs" id="books-status-tabs" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
-                            <div style="display: flex; gap: 1rem;">
-                                <button class="book-tab-btn active" data-status="reading" style="background: transparent; border: none; color: var(--accent-color); font-size: 1.1rem; font-weight: bold; cursor: pointer; padding: 0.5rem 1rem; position: relative;">📖 読書中</button>
-                                <button class="book-tab-btn" data-status="unread" style="background: transparent; border: none; color: var(--text-secondary); font-size: 1.1rem; font-weight: bold; cursor: pointer; padding: 0.5rem 1rem; transition: color 0.3s;">📚 読みたい</button>
-                                <button class="book-tab-btn" data-status="done" style="background: transparent; border: none; color: var(--text-secondary); font-size: 1.1rem; font-weight: bold; cursor: pointer; padding: 0.5rem 1rem; transition: color 0.3s;">✅ 読了</button>
+                        <div class="books-tabs" id="books-status-tabs" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                            <div class="segmented-control">
+                                <button class="book-tab-btn segment-btn active" data-status="reading">読書中</button>
+                                <button class="book-tab-btn segment-btn" data-status="unread">読みたい</button>
+                                <button class="book-tab-btn segment-btn" data-status="done">読了</button>
                             </div>
-                            <div>
-                                <select id="book-genre-filter" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; outline: none; cursor: pointer;">
+                            <div style="width: 100%;">
+                                <select id="book-genre-filter" class="native-select">
                                     <option value="all">すべてのジャンル</option>
                                     <option value="すぐ実務に活かす">すぐ実務に活かす</option>
                                     <option value="思考力を鍛える">思考力を鍛える</option>

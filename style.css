@@ -89,9 +89,7 @@ h1 {
     font-weight: 600;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #ffffff, #8b949e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
 }
 
 .subtitle {
@@ -334,7 +332,7 @@ h1 {
 
 .tab-btn:hover {
     color: var(--text-primary);
-    background: rgba(255,255,255,0.08);
+    background: rgba(128,128,128,0.12);
     transform: translateY(-4px);
 }
 
@@ -363,7 +361,7 @@ input[type=range].slider::-webkit-slider-runnable-track {
     width: 100%;
     height: 6px;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--border-color);
     border-radius: 3px;
     border: 1px solid rgba(0,0,0,0.3);
 }
@@ -401,12 +399,70 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 /* ---------------------------------------------------- */
 /* Form Shared Styles                                   */
 /* ---------------------------------------------------- */
-.dreams-section h2, .plan-section h2, .dwmy-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 400;
-    color: var(--text-primary);
+/* ---------------------------------------------------- */
+/* Section Titles (iOS Style)                           */
+/* ---------------------------------------------------- */
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+}
+
+.ja-subtitle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* ---------------------------------------------------- */
+/* Segmented Control (iOS Style)                        */
+/* ---------------------------------------------------- */
+.segmented-control {
+    display: flex;
+    background: rgba(120, 120, 120, 0.15);
+    border-radius: 8px;
+    padding: 3px;
+    width: 100%;
+}
+
+.segment-btn {
+    flex: 1;
     text-align: center;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.segment-btn.active {
+    background: var(--bg-card);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04);
+}
+
+.native-select {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 0.9rem;
 }
 
 .dream-form {
@@ -488,7 +544,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 /* Edit Inputs (Inline Edit) */
 .inline-edit-input {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     border: 1px solid var(--accent-color);
     border-radius: 6px;
     color: #fff;
@@ -499,7 +555,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .inline-edit-age, .inline-edit-month {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     border: 1px solid var(--accent-color);
     border-radius: 6px;
     color: #fff;
@@ -542,11 +598,11 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     height: 8px;
 }
 .kanban-board::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
     border-radius: 4px;
 }
 .kanban-board::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(128,128,128,0.12);
     border-radius: 4px;
 }
 
@@ -613,13 +669,13 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     width: 4px;
 }
 .kanban-card-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     border-radius: 2px;
 }
 
 .kanban-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 0.7rem 0.8rem;
     cursor: grab;
@@ -628,7 +684,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .kanban-card:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(128,128,128,0.12);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -678,7 +734,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     font-size: 0.7rem;
     padding: 0.1rem 0.45rem;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     white-space: nowrap;
 }
 
@@ -709,7 +765,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-card .card-actions button:hover {
     color: #fff;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(128,128,128,0.12);
 }
 
 .kanban-card .card-actions .delete-btn:hover {
@@ -730,7 +786,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-card.drop-target {
     box-shadow: 0 0 0 2px var(--accent-color);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
 }
 
 .completed-accordion-btn {
@@ -766,7 +822,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-column-footer {
     padding: 0.6rem 0.8rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--border-color);
 }
 
 .kanban-add-btn {
@@ -815,7 +871,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .dream-item:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(128,128,128,0.12);
 }
 
 .dream-item input[type="checkbox"] {
@@ -999,8 +1055,8 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     background: var(--bg-modal);
     backdrop-filter: blur(20px) saturate(180%);
     border-top: 1px solid var(--border-color);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
     border-radius: 24px 24px 0 0; /* Rounded top corners only */
     padding: 1.5rem 2rem 3rem 2rem; /* Extra padding at bottom for safety */
     width: 100%;
@@ -1308,8 +1364,8 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .habit-time-group {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.2rem;
 }
@@ -1318,7 +1374,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
     color: var(--accent-color);
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    border-bottom: 1px dashed var(--border-color);
     padding-bottom: 0.5rem;
 }
 
@@ -1332,7 +1388,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .dwmy-item {
     background: rgba(22, 27, 34, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1rem 1.2rem;
     display: flex;
@@ -1367,7 +1423,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1411,10 +1467,10 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     font-size: 0.75rem;
     padding: 0.2rem 0.6rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     margin-left: 0.5rem;
     white-space: nowrap;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
 }
 
 /* Inline form styling */
@@ -1424,7 +1480,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     gap: 0.8rem;
     background: rgba(22, 27, 34, 0.8);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 0.5rem;
     margin-top: 1rem;
@@ -1446,8 +1502,8 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .dwmy-input-select {
     flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     color: var(--text-primary);
     border-radius: 12px;
     padding: 0.6rem;
@@ -1491,9 +1547,9 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     font-size: 1rem;
     padding: 3rem 0;
     opacity: 0.6;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border-radius: 16px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border: 1px dashed var(--border-color);
 }
 
 /* Checkbox shared */
@@ -1597,15 +1653,15 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     width: 6px;
 }
 .money-event-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border-radius: 4px;
 }
 .money-event-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128,128,128,0.12);
     border-radius: 4px;
 }
 .money-event-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(128,128,128,0.2);
 }
 
 /* Money Table Toggle Styles */
@@ -1616,7 +1672,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .money-details-toggle summary {
     display: inline-block;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.8rem 1.5rem;
@@ -1634,7 +1690,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .money-details-toggle summary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     color: var(--text-primary);
 }
 
@@ -1676,8 +1732,8 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .habit-time-group {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1rem;
 }
@@ -1686,7 +1742,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
     color: var(--accent-color);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
 
@@ -1706,7 +1762,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     color: var(--text-primary);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .books-grid {
@@ -1717,7 +1773,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .book-card {
     background: rgba(22, 27, 34, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.2rem;
     backdrop-filter: blur(10px);
@@ -1797,12 +1853,12 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     gap: 0.5rem;
     margin-top: auto;
     padding-top: 0.8rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    border-top: 1px dashed var(--border-color);
 }
 
 .book-btn {
     flex: 1;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     color: var(--text-primary);
     border: none;
     border-radius: 8px;
@@ -1814,7 +1870,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .book-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
 }
 
 .book-btn-primary {
@@ -1839,10 +1895,10 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     padding: 0.8rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
 }
 
 .habit-progress-header {
@@ -1854,7 +1910,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .habit-progress-bar-bg {
     width: 100%;
     height: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,128,128,0.12);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -1911,8 +1967,8 @@ details.completed-dreams-accordion .kanban-list {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(135deg, rgba(128,128,128,0.08), rgba(128,128,128,0.02));
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.5rem 2rem;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1921,9 +1977,9 @@ details.completed-dreams-accordion .kanban-list {
 }
 .habit-item:hover {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    background: linear-gradient(135deg, rgba(128,128,128,0.12), rgba(128,128,128,0.04));
     box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--border-color);
 }
 .habit-item.completed {
     border-color: rgba(76, 175, 80, 0.4);
@@ -1960,8 +2016,8 @@ details.completed-dreams-accordion .kanban-list {
 
 /* Progress Bar Upgrades */
 .daily-progress-container {
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)) !important;
-    border: 1px solid rgba(255,255,255,0.05);
+    background: linear-gradient(135deg, rgba(128,128,128,0.06), rgba(128,128,128,0.02)) !important;
+    border: 1px solid var(--border-color);
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     backdrop-filter: blur(12px);
 }
@@ -1979,15 +2035,15 @@ details.completed-dreams-accordion .kanban-list {
 
 /* Heatmap Upgrades */
 .heatmap-section {
-    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)) !important;
-    border-top: 1px solid rgba(255,255,255,0.05) !important;
+    background: linear-gradient(135deg, rgba(128,128,128,0.04), rgba(128,128,128,0.02)) !important;
+    border-top: 1px solid var(--border-color) !important;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
 }
 .heatmap-box {
     width: 14px;
     height: 14px;
     border-radius: 4px;
-    background: rgba(255,255,255,0.08);
+    background: rgba(128,128,128,0.12);
     transition: all 0.3s ease;
 }
 .heatmap-box:hover {
@@ -1999,7 +2055,7 @@ details.completed-dreams-accordion .kanban-list {
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
 }
 .heatmap-box.empty {
-    background: rgba(255,255,255,0.04);
+    background: var(--bg-card);
 }
 .heatmap-label {
     width: 140px;
@@ -2164,11 +2220,20 @@ details.completed-dreams-accordion .kanban-list {
     border: 1px solid var(--border-color);
 }
 
-.book-flip-card-front img {
+.book-front-cover {
+    width: 100%;
+    height: 100%;
+}
+
+.book-front-cover img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+}
+
+.book-front-info {
+    display: none;
 }
 
 .book-placeholder {
@@ -2253,10 +2318,10 @@ details.completed-dreams-accordion .kanban-list {
 .book-back-select {
     width: 100%;
     padding: 0.4rem;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    color: white;
+    color: var(--text-primary);
     font-size: 0.85rem;
     outline: none;
 }
@@ -2264,17 +2329,17 @@ details.completed-dreams-accordion .kanban-list {
 .book-back-btn {
     width: 100%;
     padding: 0.4rem;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    color: white;
+    color: var(--text-primary);
     font-size: 0.85rem;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .book-back-btn:hover {
-    background: rgba(255,255,255,0.2);
+    background: var(--border-color);
 }
 
 .book-back-btn.delete {
@@ -2308,21 +2373,22 @@ details.completed-dreams-accordion .kanban-list {
 @media (max-width: 600px) {
     /* --- 1. Hero Section --- */
     h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     
     .life-clock-glass {
-        padding: 1.5rem 1rem 1rem;
+        padding: 1rem;
+        margin: 0 0.5rem;
     }
 
     .clock-ring-container {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 1rem;
+        width: 100px;
+        height: 100px;
+        margin-bottom: 0.8rem;
     }
     
     .ring-age {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     
     .clock-digits-grid {
@@ -2377,22 +2443,73 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 3. Kanban & Books Grid --- */
     .kanban-board {
-        padding: 1rem;
-        gap: 1.5rem;
+        padding: 0 1rem 1rem;
+        gap: 1rem;
         scroll-snap-type: x mandatory;
     }
     
     .kanban-column {
-        min-width: 82vw;
-        max-width: 82vw;
+        min-width: 85vw;
+        max-width: 85vw;
         scroll-snap-align: center;
         padding: 1rem;
     }
     
     .bookshelf-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        padding: 0 0.5rem;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0;
+    }
+
+    .book-flip-card {
+        height: 120px;
+    }
+
+    .book-flip-card-front {
+        flex-direction: row;
+        padding: 0.5rem;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .book-front-cover {
+        width: 80px;
+        height: 100%;
+        flex-shrink: 0;
+    }
+
+    .book-front-cover img, .book-placeholder {
+        border-radius: 4px;
+    }
+    
+    .book-front-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        overflow: hidden;
+        text-align: left;
+    }
+    
+    .book-front-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.3;
+        margin-bottom: 0.2rem;
+    }
+    
+    .book-front-author {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+    
+    .book-flip-card-back {
+        padding: 0.8rem;
+    }
+    
+    .book-back-title, .book-back-author {
+        display: none;
     }
 
     /* --- 4. Bottom Sheet Modals --- */
@@ -2410,7 +2527,7 @@ details.completed-dreams-accordion .kanban-list {
     .modal-drag-handle {
         width: 60px;
         height: 6px;
-        background: rgba(255,255,255,0.3);
+        background: rgba(128,128,128,0.2);
         border-radius: 3px;
         margin: -1rem auto 1.5rem;
         cursor: grab;
@@ -2418,16 +2535,29 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 5. Spacing Tweaks --- */
     #swipe-container {
-        margin-top: 1.5rem;
+        margin-top: 0.5rem;
     }
     
     .tab-content {
-        padding-top: 1rem !important;
+        padding-top: 0.5rem !important;
     }
     
     header {
-        margin-bottom: 2.5rem;
-        margin-top: 1rem;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .section-title {
+        font-size: 0.85rem;
+    }
+
+    .dreams-section > div:first-child,
+    .books-section > div:first-child {
+        margin-bottom: 1rem !important;
+    }
+
+    .life-clock-hero {
+        margin-bottom: 1rem;
     }
 }
 

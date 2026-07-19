@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="kanban-column-title" style="color: ${cat.color};">${cat.label}</span>
                 </div>
                 <div class="kanban-list active-list"></div>
-                <button class="add-dream-in-col-btn" data-category="${catKey}" style="margin-top: 1rem; width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">＋ 新しい目標を追加</button>
+                <button class="add-dream-in-col-btn" data-category="${catKey}" style="margin-top: 1rem; width: 100%; padding: 0.8rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">＋ 新しい目標を追加</button>
                 <details class="completed-dreams-accordion">
                     <summary>完了済みを表示</summary>
                     <div class="kanban-list completed-list"></div>
@@ -1005,10 +1005,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="book-flip-card-inner">
                     <div class="book-flip-card-front">
-                        ${book.imageData 
-                            ? `<img src="${book.imageData}" alt="Cover" referrerpolicy="no-referrer">` 
-                            : `<div class="book-placeholder"><span>${escapeHTML(book.title)}</span></div>`
-                        }
+                        <div class="book-front-cover">
+                            ${book.imageData 
+                                ? `<img src="${book.imageData}" alt="Cover" referrerpolicy="no-referrer">` 
+                                : `<div class="book-placeholder"><span>${escapeHTML(book.title)}</span></div>`
+                            }
+                        </div>
+                        <div class="book-front-info">
+                            <div class="book-front-title">${escapeHTML(book.title)}</div>
+                            <div class="book-front-author">${escapeHTML(book.author || '著者不明')}</div>
+                        </div>
                     </div>
                     <div class="book-flip-card-back">
                         <div class="book-back-title">${escapeHTML(book.title)}</div>
