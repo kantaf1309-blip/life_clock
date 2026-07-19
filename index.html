@@ -165,6 +165,7 @@
                 <!-- ================================================ -->
                 <div id="dwmy-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
                     <section class="dwmy-section" style="max-width: 800px; margin: 0 auto; padding-top: 2rem;">
+                        <button id="add-habit-btn" style="display: none;"></button>
                         <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 2.5rem; position: relative;">
                             <!-- Today's Activity Ring -->
                             <div class="habit-summary-ring" style="position: relative; width: 130px; height: 130px;">
@@ -190,8 +191,8 @@
                 <!-- Books View (Reading Plan)                         -->
                 <!-- ================================================ -->
                 <div id="books-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
-                    <section class="books-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <section class="books-section" style="max-width: 800px; margin: 0 auto; padding: 1rem 0;">
+                        <div style="display: none;">
                             <h2 class="section-title">BOOKS <span class="ja-subtitle">読書ギャラリー</span></h2>
                             <button id="add-book-btn" class="primary-btn" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 20px; padding: 0.8rem 1.5rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">＋ 本を登録</button>
                         </div>

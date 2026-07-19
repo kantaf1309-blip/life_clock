@@ -2780,9 +2780,11 @@ details.completed-dreams-accordion .kanban-list {
         background: var(--bg-main) !important;
         padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
         border-bottom: none !important;
+        width: 100% !important;
     }
     
     body {
         padding-top: 0 !important;
+        flex-direction: column;
     }
 }
