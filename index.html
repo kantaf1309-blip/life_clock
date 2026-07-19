@@ -59,83 +59,68 @@
         <!-- Tab Navigation (3 tabs)                           -->
         <!-- ================================================ -->
         <div class="tabs">
-            <button class="tab-btn active" data-target="dreams-view">
-                <span class="tab-icon">🎯</span>目標
+            <button class="tab-btn active" data-target="time-view">
+                <span class="material-icons tab-icon">schedule</span>時間
+            </button>
+            <button class="tab-btn" data-target="dreams-view">
+                <span class="material-icons tab-icon">ads_click</span>目標
             </button>
             <button class="tab-btn" data-target="dwmy-view">
-                <span class="tab-icon">✅</span>習慣
+                <span class="material-icons tab-icon">task_alt</span>習慣
             </button>
             <button class="tab-btn" data-target="books-view">
-                <span class="tab-icon">📚</span>読書
+                <span class="material-icons tab-icon">menu_book</span>読書
             </button>
         </div>
 
-        <!-- ================================================ -->
-        <!-- Swipe Container for Mobile Optimization           -->
-        <!-- ================================================ -->
         <div id="swipe-container" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
             
             <div class="swipe-track" style="display: flex; width: max-content;">
                 
-                <!-- ================================================ -->
-                <!-- Dream List View (Category-based)                  -->
-                <!-- ================================================ -->
-                <div id="dreams-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
-                    <!-- ================================================ -->
-                    <!-- Life Clock Hero Section                           -->
-                    <!-- ================================================ -->
+                <!-- Time View (Life Clock) -->
+                <div id="time-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: block; opacity: 1;">
                     <section class="life-clock-hero">
                         <div class="life-clock-glass">
                             <!-- Circular Progress Ring -->
                             <div class="clock-ring-container">
-                                <svg class="clock-ring" viewBox="0 0 200 200">
-                                    <circle class="ring-bg" cx="100" cy="100" r="88" />
-                                    <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="88" />
+                                <svg class="clock-ring" viewBox="0 0 200 200" style="overflow: visible;">
+                                    <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
+                                    <circle class="ring-progress" cx="100" cy="100" r="88"></circle>
                                 </svg>
-                                <div class="ring-inner">
-                                    <div class="ring-age" id="current-age">27</div>
-                                    <div class="ring-age-label">歳</div>
-                                    <div class="ring-age-decimal" id="current-age-decimal">.000000</div>
+                                <div class="ring-text">
+                                    <span class="ring-age" id="current-age-display">0</span>
+                                    <span class="ring-label">歳</span>
+                                    <div class="ring-fraction" id="age-fraction">.00000000</div>
                                 </div>
                             </div>
 
-                            <!-- Remaining Time Digits -->
-                            <div class="clock-remaining-label">残された時間</div>
-                            <div class="clock-digits-grid" id="remaining-clock">
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-years">58</span>
-                                    <span class="digit-label">年</span>
-                                </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-days">184</span>
-                                    <span class="digit-label">日</span>
-                                </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-hours">03</span>
-                                    <span class="digit-label">時間</span>
-                                </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-minutes">44</span>
-                                    <span class="digit-label">分</span>
-                                </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-seconds">15</span>
-                                    <span class="digit-label">秒</span>
-                                </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; letter-spacing: 2px;">残された時間</p>
+                            <div class="clock-digits-container" id="remaining-clock">
+                                <div class="clock-block"><span class="digit" id="rem-years">00</span><span class="label">年</span></div>
+                                <div class="clock-block"><span class="digit" id="rem-days">000</span><span class="label">日</span></div>
+                                <div class="clock-block"><span class="digit" id="rem-hours">00</span><span class="label">時間</span></div>
+                                <div class="clock-block"><span class="digit" id="rem-minutes">00</span><span class="label">分</span></div>
+                                <div class="clock-block"><span class="digit" id="rem-seconds">00</span><span class="label">秒</span></div>
                             </div>
-
-                            <!-- Progress Bar -->
-                            <div class="clock-progress-container">
-                                <div class="clock-progress-bar" id="life-progress-bar"></div>
-                            </div>
-                            <div class="clock-progress-label">
-                                <span>1999年2月20日</span>
-                                <span id="life-progress-percent">31.2%</span>
-                                <span>2084年</span>
+                            
+                            <!-- Life Progress Bar -->
+                            <div class="life-progress-container">
+                                <div class="life-progress-bar">
+                                    <div class="life-progress-fill" id="life-progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <div class="life-progress-labels">
+                                    <span id="birth-date-display">1990年1月1日</span>
+                                    <span id="progress-percent" style="color: var(--accent-color); font-weight: 600;">0.0%</span>
+                                </div>
                             </div>
                         </div>
                     </section>
-
+                </div>
+                
+                <!-- ================================================ -->
+                <!-- Dream List View (Category-based)                  -->
+                <!-- ================================================ -->
+                <div id="dreams-view" class="tab-content" style="width: 100vw; scroll-snap-align: start; padding: 0 calc(50vw - 400px); flex: 0 0 100vw; display: none; opacity: 0;">
                     <section class="dreams-section">
                         <div style="display: none;">
                             <h2 class="section-title">GOALS & DREAMS <span class="ja-subtitle">目標・夢リスト</span></h2>
