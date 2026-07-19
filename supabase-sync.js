@@ -108,8 +108,8 @@ window.syncToCloud = async function() {
     isSyncing = true;
     try {
         const dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
-        const habits = JSON.parse(localStorage.getItem('lifeClockHabits_v2')) || [];
-        const habitLogs = JSON.parse(localStorage.getItem('lifeClockHabitLogs_v2')) || {};
+        const habits = JSON.parse(localStorage.getItem('lifeClockHabits')) || [];
+        const habitLogs = JSON.parse(localStorage.getItem('lifeClockHabitLogs')) || {};
         const books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
         
         const { error } = await supabaseClient
@@ -151,8 +151,8 @@ async function syncFromCloud(isInitial = false) {
 
         if (data) {
             let localDreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
-            let localHabits = JSON.parse(localStorage.getItem('lifeClockHabits_v2')) || [];
-            let localHabitLogs = JSON.parse(localStorage.getItem('lifeClockHabitLogs_v2')) || {};
+            let localHabits = JSON.parse(localStorage.getItem('lifeClockHabits')) || [];
+            let localHabitLogs = JSON.parse(localStorage.getItem('lifeClockHabitLogs')) || {};
             let localBooks = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
             
             // サーバーデータ
@@ -167,11 +167,19 @@ async function syncFromCloud(isInitial = false) {
                 await window.syncToCloud();
                 return;
             }
+            
+            // バグによるデータ消失を防ぐための安全措置
+            if (serverHabits.length === 0 && localHabits.length > 0) {
+                console.log('Recovering local habits to cloud...');
+                isSyncing = false;
+                await window.syncToCloud();
+                return;
+            }
 
             // サーバーデータでローカルを上書き（簡易的な実装: リアルタイム同期を前提とするためサーバー正とする）
             localStorage.setItem('lifeClockDreams', JSON.stringify(serverDreams));
-            localStorage.setItem('lifeClockHabits_v2', JSON.stringify(serverHabits));
-            localStorage.setItem('lifeClockHabitLogs_v2', JSON.stringify(serverHabitLogs));
+            localStorage.setItem('lifeClockHabits', JSON.stringify(serverHabits));
+            localStorage.setItem('lifeClockHabitLogs', JSON.stringify(serverHabitLogs));
             localStorage.setItem('lifeClockBooks', JSON.stringify(serverBooks));
             
             // 画面を再描画（script.jsの関数を呼び出し）
