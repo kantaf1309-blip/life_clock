@@ -1,0 +1,2390 @@
+:root {
+    --bg-color: #0b0e14;
+    --card-bg: rgba(22, 27, 34, 0.6);
+    --text-primary: #ffffff;
+    --text-secondary: #8b949e;
+    --accent-color: #FFD700;
+    --accent-glow: rgba(255, 215, 0, 0.4);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --completed-color: #484f58;
+    --danger-color: #f85149;
+    --success-color: #2ea043;
+    --glass-blur: blur(20px);
+
+    /* Category Colors (Kanban) */
+    --cat-career: #3b82f6;
+    --cat-growth: #10b981;
+    --cat-family: #f43f5e;
+    --cat-health: #22c55e;
+    --cat-mind: #a855f7;
+    --cat-hobbies: #f59e0b;
+    --cat-wealth: #eab308;
+    --cat-uncategorized: #6b7280;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+@keyframes aurora {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    background: linear-gradient(135deg, #0b0e14, #1a202c, #0d1636, #1b0d36, #0b0e14);
+    background-size: 400% 400%;
+    animation: aurora 25s ease infinite;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1.5rem 1rem 120px 1rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #ffffff, #8b949e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* ---------------------------------------------------- */
+/* Life Clock Hero                                      */
+/* ---------------------------------------------------- */
+.life-clock-hero {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.life-clock-glass {
+    background: rgba(22, 27, 34, 0.35);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    padding: 2.5rem 2rem 1.5rem;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.life-clock-glass::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -30%;
+    width: 160%;
+    height: 160%;
+    background: conic-gradient(from 180deg, rgba(255, 215, 0, 0.06), rgba(255, 120, 50, 0.04), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+    animation: clock-shimmer 12s linear infinite;
+}
+
+@keyframes clock-shimmer {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- Circular Progress Ring --- */
+.clock-ring-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.5rem;
+    z-index: 1;
+}
+
+.clock-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 5;
+}
+
+.ring-fill {
+    fill: none;
+    stroke: url(#ring-gradient);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 553;
+    stroke-dashoffset: 553;
+    transition: stroke-dashoffset 1s ease-out;
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
+}
+
+.ring-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.ring-age {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+}
+
+.ring-age-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+    margin-top: 2px;
+}
+
+.ring-age-decimal {
+    font-size: 0.65rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.3);
+    font-variant-numeric: tabular-nums;
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+}
+
+/* --- Remaining Time Label --- */
+.clock-remaining-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Digit Cards Grid --- */
+.clock-digits-grid {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.digit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 0.7rem 0.6rem 0.5rem;
+    min-width: 56px;
+    transition: background 0.3s ease;
+}
+
+.digit-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.digit-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.digit-label {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+/* --- Progress Bar --- */
+.clock-progress-container {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 1;
+}
+
+.clock-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.8), rgba(255, 140, 50, 0.8));
+    width: 0%;
+    border-radius: 2px;
+    transition: width 1s ease-out;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.clock-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.25);
+    position: relative;
+    z-index: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------- */
+/* Tabs (5-tab support)                                 */
+/* ---------------------------------------------------- */
+.tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    justify-content: center;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 20, 25, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.8rem 1.5rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.tab-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-4px);
+}
+
+.tab-btn.active {
+    color: var(--accent-color);
+    background: rgba(255, 215, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+}
+
+.tab-icon {
+    display: block;
+    font-size: 1.4rem;
+}
+
+/* スライダー (range) スタイル */
+input[type=range].slider {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+input[type=range].slider:focus {
+    outline: none;
+}
+input[type=range].slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.3);
+}
+input[type=range].slider::-webkit-slider-thumb {
+    border: 2px solid var(--accent-color);
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.5);
+    transition: transform 0.1s;
+}
+input[type=range].slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Tab Contents */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------- */
+/* Form Shared Styles                                   */
+/* ---------------------------------------------------- */
+.dreams-section h2, .plan-section h2, .dwmy-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.dream-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.plan-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+.plan-select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    padding: 0 0.8rem;
+    outline: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.plan-select:focus {
+    border-color: var(--accent-color);
+}
+
+.dream-form input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.age-input {
+    flex: 0 0 80px !important;
+    text-align: center;
+}
+
+.month-input {
+    flex: 0 0 140px !important;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.dream-form input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.dream-form button {
+    background: var(--text-primary);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 12px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.dream-form button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Edit Inputs (Inline Edit) */
+.inline-edit-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    color: #fff;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+}
+
+.inline-edit-age, .inline-edit-month {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    color: #fff;
+    padding: 0.4rem;
+    font-size: 0.95rem;
+    text-align: center;
+    max-width: 100px;
+    outline: none;
+}
+/* ---------------------------------------------------- */
+/* Kanban Board                                         */
+/* ---------------------------------------------------- */
+.dreams-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.dreams-header {
+    max-width: 800px;
+    margin: 0 auto 1rem auto;
+    text-align: center;
+}
+
+.kanban-board {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    min-height: 500px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.kanban-board::-webkit-scrollbar {
+    height: 8px;
+}
+.kanban-board::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.kanban-column {
+    min-width: 340px;
+    max-width: 400px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: rgba(22, 27, 34, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    scroll-snap-align: start;
+}
+
+.kanban-column.drag-over {
+    box-shadow: 0 0 0 2px var(--accent-color), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.kanban-column-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+}
+
+.kanban-column-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--col-color, rgba(255,255,255,0.1));
+}
+
+.kanban-column-header .col-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+.kanban-card-list {
+    flex: 1;
+    padding: 0.8rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 100px;
+}
+
+.kanban-card-list::-webkit-scrollbar {
+    width: 4px;
+}
+.kanban-card-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.kanban-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    position: relative;
+}
+
+.kanban-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.kanban-card:active,
+.kanban-card.dragging {
+    cursor: grabbing;
+    opacity: 0.5;
+    transform: scale(0.97);
+}
+
+.kanban-card .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.kanban-card .card-top input[type="checkbox"] {
+    margin-top: 0.2rem;
+    accent-color: var(--accent-color);
+    transform: scale(1.15);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.kanban-card .card-text {
+    flex: 1;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.kanban-card.completed .card-text {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.kanban-card .card-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.kanban-card .card-badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+}
+
+.kanban-card .card-actions {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.2rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.kanban-card:hover .card-actions {
+    opacity: 1;
+}
+
+.kanban-card .card-actions button {
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.kanban-card .card-actions button:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.kanban-card .card-actions .delete-btn:hover {
+    color: var(--danger-color, #ef4444);
+}
+
+.kanban-card.child-card {
+    margin-left: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.kanban-card.child-card .step-icon {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.kanban-card.drop-target {
+    box-shadow: 0 0 0 2px var(--accent-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.completed-accordion-btn {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    transition: color 0.2s ease;
+}
+
+.completed-accordion-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.completed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+.kanban-drop-indicator {
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 2px;
+    margin: 0.2rem 0;
+    transition: opacity 0.15s ease;
+}
+
+.kanban-column-footer {
+    padding: 0.6rem 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.kanban-add-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.kanban-add-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .kanban-board {
+        padding: 0.5rem 0;
+    }
+    .kanban-column {
+        min-width: 240px;
+    }
+}
+
+.dream-list {
+    list-style: none;
+    flex: 1;
+    width: 100%;
+}
+
+.dream-item {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    line-height: 1.5;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dream-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dream-item input[type="checkbox"] {
+    margin-top: 0.3rem;
+    accent-color: var(--text-primary);
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.dream-item.completed span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.dream-item .icon-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.dream-item:hover .icon-btn {
+    opacity: 1;
+}
+
+.dream-item-actions button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 2px;
+}
+.dream-item-actions button:hover {
+    color: var(--danger-color, #ef4444);
+}
+
+/* ---------------------------------------------------- */
+/* Dream Cards (image-based layout)                     */
+/* ---------------------------------------------------- */
+.dream-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.dream-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.dream-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.dream-card-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.dream-card-no-image {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(0,0,0,0.2);
+}
+
+.dream-card-body {
+    padding: 1.5rem;
+}
+
+.dream-card-cat {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
+
+.dream-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+    word-break: break-word;
+}
+
+.dream-card-date {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.dream-card-memo {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.dream-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.dream-card.completed {
+    opacity: 0.5;
+}
+
+.dream-card.completed .dream-card-title {
+    text-decoration: line-through;
+    color: var(--completed-color);
+}
+
+.completed-divider {
+    margin: 2rem 0 1.5rem 0;
+    text-align: center;
+    position: relative;
+}
+
+.completed-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.completed-divider span {
+    background: var(--bg-color);
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------------------------------------------------- */
+/* Dream Edit Modal                                     */
+/* ---------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: flex-end; /* Align bottom */
+    justify-content: center;
+    z-index: 1000;
+    animation: modalFadeIn 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: rgba(30, 30, 30, 0.85); /* Slightly transparent dark */
+    backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px 24px 0 0; /* Rounded top corners only */
+    padding: 1.5rem 2rem 3rem 2rem; /* Extra padding at bottom for safety */
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    position: relative;
+    touch-action: none; /* Prevent scroll interference while dragging sheet */
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* Scrollbar specific for modal if needed */
+.modal-content::-webkit-scrollbar {
+    width: 0px; /* Hide scrollbar for cleaner look but keep functionality */
+}
+
+.modal-drag-handle {
+    width: 40px;
+    height: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+    margin: 0 auto 1.5rem auto;
+    cursor: grab;
+}
+.modal-drag-handle:active {
+    cursor: grabbing;
+}
+
+.modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.modal-field {
+    margin-bottom: 1rem;
+}
+
+.modal-field label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+}
+
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.modal-field input:focus,
+.modal-field select:focus,
+.modal-field textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.modal-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-image-preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-primary {
+    background: var(--accent-color);
+    color: #000;
+}
+
+.modal-btn-primary:hover {
+    opacity: 0.9;
+}
+
+.modal-btn-secondary {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+}
+
+.modal-btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ---------------------------------------------------- */
+/* Action Buttons                                       */
+/* ---------------------------------------------------- */
+.actions-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.icon-btn.delete-btn:hover {
+    color: var(--danger-color);
+    background: rgba(248, 81, 73, 0.1);
+}
+
+.icon-btn.save-btn {
+    color: var(--success-color);
+    background: rgba(46, 160, 67, 0.1);
+}
+
+.icon-btn.save-btn:hover {
+    background: rgba(46, 160, 67, 0.2);
+}
+
+/* ---------------------------------------------------- */
+/* Timeline (Life Plan) Styles                          */
+/* ---------------------------------------------------- */
+.timeline-container {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-top: 2rem;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 14px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.timeline {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.timeline-item {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: transform 0.2s ease;
+}
+
+.timeline-item.short-term {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.timeline-item.short-term .age-badge {
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.3);
+    background: rgba(96, 165, 250, 0.1);
+}
+
+.timeline-item:hover {
+    transform: translateX(5px);
+    border-color: var(--accent-color);
+}
+
+.timeline-item.short-term:hover {
+    border-color: #60a5fa;
+}
+
+.timeline-item.editing {
+    border-color: var(--accent-color);
+    transform: translateX(0);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -2.5rem;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+    z-index: 2;
+}
+
+.timeline-item.short-term::before {
+    border-color: #60a5fa;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+}
+
+.timeline-item.is-now::before {
+    background: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow), 0 0 30px var(--accent-glow);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+    50% { box-shadow: 0 0 20px var(--accent-glow), 0 0 40px var(--accent-glow); }
+}
+
+.now-marker {
+    background: rgba(255,215,0,0.1);
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    text-align: center;
+}
+
+.dream-auto-marker {
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    opacity: 0.8;
+    margin-top: 0.2rem;
+}
+
+.age-badge {
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    min-width: 80px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.plan-text {
+    flex: 1;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* ---------------------------------------------------- */
+/* Habit Dashboard                                      */
+/* ---------------------------------------------------- */
+.habit-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.habit-time-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.2rem;
+}
+
+.habit-group-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.dwmy-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.dwmy-item {
+    background: rgba(22, 27, 34, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.dwmy-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dwmy-item.checked {
+    opacity: 0.6;
+    background: rgba(22, 27, 34, 0.3);
+    border-color: transparent;
+}
+
+.dwmy-item.checked:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.dwmy-item.checked .dwmy-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.custom-checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.custom-checkbox:hover {
+    border-color: var(--accent-color);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.dwmy-item.checked .custom-checkbox {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.dwmy-item.checked .custom-checkbox::after {
+    content: '';
+    width: 5px;
+    height: 10px;
+    border: solid var(--bg-color);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-top: -2px;
+}
+
+.dwmy-checkbox {
+    display: none; /* Hide original checkbox */
+}
+
+.dwmy-text {
+    flex: 1;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.dwmy-tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Inline form styling */
+.dwmy-form-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(22, 27, 34, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dwmy-input-text {
+    flex: 2;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+}
+
+.dwmy-input-text:focus {
+    outline: none;
+}
+
+.dwmy-input-select {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: 12px;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.dwmy-add-btn {
+    background: linear-gradient(135deg, var(--accent-color), #ffb700);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.dwmy-add-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.dwmy-pane {
+    display: none;
+}
+
+.dwmy-pane.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.dwmy-empty {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    padding: 3rem 0;
+    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Checkbox shared */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--accent-color);
+}
+
+/* ---------------------------------------------------- */
+/* Responsive                                           */
+/* ---------------------------------------------------- */
+@media (max-width: 600px) {
+    .number { font-size: 2.5rem; }
+    .time-unit { min-width: 70px; }
+    .dream-form { flex-direction: column; }
+    .plan-input-wrapper { flex-direction: column; gap: 0.8rem; }
+    .plan-select, .age-input, .month-input { flex: 1 !important; width: 100%; }
+    .dream-form button { padding: 1rem; }
+    .timeline-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+    .timeline-item.editing { align-items: stretch; }
+    .inline-edit-age, .inline-edit-month { max-width: 100%; }
+    .bottom-cards { flex-direction: column; }
+    .dream-cards-grid { grid-template-columns: 1fr; }
+    .dwmy-form { flex-direction: column; }
+    .dwmy-form button { padding: 0.8rem; }
+    .category-filters { justify-content: flex-start; }
+    .tab-btn { font-size: 0.7rem; padding: 0.3rem 0.4rem; }
+    .tab-icon { font-size: 1rem; }
+}
+
+/* Responsive adjustments for money plan */
+@media (max-width: 600px) {
+    .money-event-form {
+        flex-direction: column;
+    }
+    .money-age-input, .money-name-input, .money-amount-input {
+        flex: 1;
+        width: 100%;
+    }
+    .money-event-item {
+        flex-wrap: wrap;
+    }
+    .money-event-item .event-name {
+        flex: 1 1 100%;
+        order: 3;
+        margin-top: 0.5rem;
+    }
+}
+
+.money-chart-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+@media (max-width: 600px) {
+    .money-chart-wrapper {
+        height: 250px;
+        padding: 1rem;
+    }
+}
+
+/* Money Top Panel Layout (Side-by-side) */
+.money-top-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    .money-top-panel {
+        grid-template-columns: 1fr 1fr;
+    }
+    .money-settings-card, .money-events-card {
+        margin-bottom: 0;
+        height: 100%;
+    }
+}
+
+.money-event-list {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for event list */
+.money-event-list::-webkit-scrollbar {
+    width: 6px;
+}
+.money-event-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+.money-event-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.money-event-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Money Table Toggle Styles */
+.money-details-toggle {
+    margin-top: 1.5rem;
+}
+
+.money-details-toggle summary {
+    display: inline-block;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    list-style: none; /* Hide default triangle in many browsers */
+    text-align: center;
+    width: 100%;
+}
+
+.money-details-toggle summary::-webkit-details-marker {
+    display: none; /* Hide default triangle in WebKit */
+}
+
+.money-details-toggle summary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.money-details-toggle summary::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.money-details-toggle[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.money-details-toggle[open] .money-table-wrapper {
+    margin-top: 1rem;
+    animation: fadeInDown 0.3s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------- */
+/* Books View (Reading Plan)                            */
+/* ---------------------------------------------------- */
+.books-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+.books-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.habit-time-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.habit-group-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+/* Base list item style reuse dwmy-list */
+.dwmy-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.books-column-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.book-card {
+    background: rgba(22, 27, 34, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.2rem;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.book-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 0.2rem;
+}
+
+.book-author {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.book-target-date {
+    font-size: 0.75rem;
+    color: var(--accent-color);
+    background: rgba(255, 215, 0, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.book-progress-wrapper {
+    margin-top: 0.5rem;
+}
+
+.book-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.book-progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.book-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffb700, var(--accent-color));
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.kanban-board.hide-locked .dream-card.locked {
+    display: none !important;
+}
+
+.book-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.8rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.book-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.book-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.book-btn-primary {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--accent-color);
+}
+
+.book-btn-primary:hover {
+    background: rgba(255, 215, 0, 0.25);
+}
+
+@media (max-width: 768px) {
+    .books-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------------------------------------------------- */
+/* Goal Detail Modal Styles                             */
+/* ---------------------------------------------------- */
+.habit-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.habit-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.habit-progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.habit-progress-bar-fill {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+
+/* ================================================ */
+/* Premium UI Upgrades & Glassmorphism              */
+/* ================================================ */
+
+/* Completed Dreams Accordion */
+details.completed-dreams-accordion {
+    margin-top: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border-radius: 12px;
+}
+details.completed-dreams-accordion summary {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 1px dashed rgba(255,255,255,0.1);
+}
+details.completed-dreams-accordion summary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255,255,255,0.8);
+}
+details.completed-dreams-accordion .kanban-list {
+    margin-top: 1rem;
+    min-height: auto;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.15);
+    border-radius: 12px;
+    border: 1px inset rgba(255,255,255,0.02);
+}
+
+/* ================================================ */
+/* Premium Habit Tracker Styles                     */
+/* ================================================ */
+.habit-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+.habit-item:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.habit-item.completed {
+    border-color: rgba(76, 175, 80, 0.4);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+}
+.habit-main {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+.habit-text {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.95);
+    transition: all 0.3s ease;
+}
+.habit-item.completed .habit-text {
+    text-decoration: line-through;
+    color: rgba(255,255,255,0.4);
+}
+.habit-goal-badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+}
+
+/* Progress Bar Upgrades */
+.daily-progress-container {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)) !important;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    backdrop-filter: blur(12px);
+}
+.progress-bar-bg {
+    background: rgba(0,0,0,0.4) !important;
+    border-radius: 20px !important;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    height: 12px !important;
+}
+#daily-progress-fill {
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--accent-color), #8a2be2) !important;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+}
+
+/* Heatmap Upgrades */
+.heatmap-section {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)) !important;
+    border-top: 1px solid rgba(255,255,255,0.05) !important;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+}
+.heatmap-box {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+}
+.heatmap-box:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+.heatmap-box.active {
+    background: linear-gradient(135deg, var(--success-color), #2e7d32);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+}
+.heatmap-box.empty {
+    background: rgba(255,255,255,0.04);
+}
+.heatmap-label {
+    width: 140px;
+    height: 22px; /* Fixed height to match days box container */
+    line-height: 22px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+.heatmap-days {
+    display: flex;
+    gap: 5px;
+    height: 22px; /* Keep strict height to align with label */
+    align-items: center;
+}
+
+/* ================================================ */
+/* New Kanban / Dependency Styles (Restored & Simple)*/
+/* ================================================ */
+.dream-card.locked {
+    opacity: 0.6;
+}
+.dream-card.locked .dream-check {
+    pointer-events: none;
+}
+.dream-card.locked::after {
+    content: '🔒 前提タスク待ち';
+    display: block;
+    font-size: 0.75rem;
+    color: var(--danger-color);
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+.dream-card.is-child {
+    margin-left: 24px;
+    position: relative;
+}
+.dream-card.is-child::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 24px;
+    width: 12px;
+    height: 2px;
+    background: rgba(255,255,255,0.2);
+}
+.dream-card.is-child::after {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: -20px; /* Connects upward to parent */
+    width: 2px;
+    height: 44px;
+    background: rgba(255,255,255,0.2);
+}
+
+.dream-card.drop-target-parent {
+    border: 2px dashed var(--accent-color);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255,107,107,0.4);
+    background: rgba(255,255,255,0.05);
+}
+
+details.completed-dreams-accordion {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    cursor: pointer;
+}
+details.completed-dreams-accordion summary {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    outline: none;
+    user-select: none;
+}
+details.completed-dreams-accordion .kanban-list {
+    margin-top: 1rem;
+    min-height: auto;
+}
+
+.add-dream-in-col-btn:hover {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.4) !important;
+}
+
+/* ========================================= */
+/* Bookshelf & 3D Flip Card Styles           */
+/* ========================================= */
+.bookshelf-container {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+    min-height: 400px;
+    position: relative;
+}
+
+.bookshelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 3rem 2rem;
+    perspective: 1200px; /* For 3D flip */
+}
+
+/* The flip card container */
+.book-flip-card {
+    background: transparent;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    perspective: 1200px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+/* The actual flipping part */
+.book-flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    border-radius: 8px;
+}
+
+/* Apply flip on parent class flip-active */
+.book-flip-card.flip-active .book-flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Hover lift effect for the whole card */
+.book-flip-card:hover {
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+/* Front and Back common */
+.book-flip-card-front, .book-flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Front side */
+.book-flip-card-front {
+    background-color: #2a2a2a;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-flip-card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.book-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+}
+.book-placeholder span {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+
+/* Back side */
+.book-flip-card-back {
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.book-back-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: var(--accent-color);
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-back-author {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.5rem;
+}
+
+.book-back-memo-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 4px;
+    padding: 0.4rem;
+    font-size: 0.8rem;
+    resize: none;
+    margin-bottom: 0.5rem;
+    flex: 1;
+}
+
+.book-back-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.book-back-select {
+    width: 100%;
+    padding: 0.4rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    color: white;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.book-back-btn {
+    width: 100%;
+    padding: 0.4rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.book-back-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.book-back-btn.delete {
+    color: #ff6b6b;
+    border-color: rgba(255,107,107,0.3);
+}
+.book-back-btn.delete:hover {
+    background: rgba(255,107,107,0.2);
+}
+
+.book-tab-btn.active {
+    border-bottom: 2px solid var(--accent-color) !important;
+}
+
+/* Shelf Base (Visual effect below each row) */
+.bookshelf-grid::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+/* ============================================================ */
+/* Mobile Optimizations                                         */
+/* ============================================================ */
+@media (max-width: 600px) {
+    /* --- 1. Hero Section --- */
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .life-clock-glass {
+        padding: 1.5rem 1rem 1rem;
+    }
+
+    .clock-ring-container {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 1rem;
+    }
+    
+    .ring-age {
+        font-size: 2.2rem;
+    }
+    
+    .clock-digits-grid {
+        gap: 4px;
+        flex-wrap: nowrap;
+    }
+    
+    .digit-card {
+        min-width: 48px;
+        padding: 0.5rem 0.3rem 0.4rem;
+    }
+    
+    .digit-value {
+        font-size: 1.2rem;
+    }
+
+    /* --- 2. Bottom Navigation (Tabs) --- */
+    .tabs {
+        bottom: env(safe-area-inset-bottom, 1rem);
+        padding: 0.6rem 1rem;
+        width: 90%;
+        max-width: 360px;
+    }
+    
+    .tab-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+    
+    .tab-icon {
+        font-size: 1.1rem;
+        margin-right: 0 !important;
+    }
+    
+    body {
+        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* --- 3. Kanban & Books Grid --- */
+    .kanban-board {
+        padding: 1rem;
+        gap: 1.5rem;
+        scroll-snap-type: x mandatory;
+    }
+    
+    .kanban-column {
+        min-width: 82vw;
+        max-width: 82vw;
+        scroll-snap-align: center;
+        padding: 1rem;
+    }
+    
+    .bookshelf-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    /* --- 4. Bottom Sheet Modals --- */
+    .modal-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 24px 24px 0 0;
+        padding: 2rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 0px));
+        transform: translateY(100%);
+    }
+    
+    .modal-drag-handle {
+        width: 60px;
+        height: 6px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 3px;
+        margin: -1rem auto 1.5rem;
+        cursor: grab;
+    }
+
+    /* --- 5. Spacing Tweaks --- */
+    #swipe-container {
+        margin-top: 1.5rem;
+    }
+    
+    .tab-content {
+        padding-top: 1rem !important;
+    }
+    
+    header {
+        margin-bottom: 2.5rem;
+        margin-top: 1rem;
+    }
+}
