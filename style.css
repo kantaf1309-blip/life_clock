@@ -2707,10 +2707,42 @@ details.completed-dreams-accordion .kanban-list {
 
 .nav-bar-title {
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-primary);
     text-align: center;
     flex: 1;
+}
+
+/* --- New Header Icons (Capture Style) --- */
+.header-icon-btn {
+    background: rgba(128, 128, 128, 0.15);
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s;
+}
+.header-icon-btn .material-icons {
+    font-size: 1.2rem;
+}
+.header-icon-btn.profile-icon {
+    background: var(--text-primary);
+    color: var(--bg-main);
+}
+.header-badge {
+    display: flex;
+    align-items: center;
+    background: rgba(128, 128, 128, 0.15);
+    padding: 0 8px 0 4px;
+    border-radius: 16px;
+    height: 32px;
+    gap: 2px;
 }
 
 .nav-icon-btn {

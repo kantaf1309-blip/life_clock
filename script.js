@@ -431,8 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Update Top Nav Title
                             const titleEl = document.getElementById('nav-title');
                             if (titleEl) {
-                                if (activeId === 'dreams-view') titleEl.textContent = '目標・夢リスト';
-                                else if (activeId === 'dwmy-view') titleEl.textContent = '習慣・ルーティン';
+                                if (activeId === 'time-view') titleEl.textContent = 'ホーム';
+                                else if (activeId === 'dreams-view') titleEl.textContent = '目標リスト';
+                                else if (activeId === 'dwmy-view') titleEl.textContent = '習慣・日課';
                                 else if (activeId === 'books-view') titleEl.textContent = '読書リスト';
                             }
                         } else {
