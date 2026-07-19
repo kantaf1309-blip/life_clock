@@ -2541,6 +2541,52 @@ details.completed-dreams-accordion .kanban-list {
     .section-title {
         font-size: 0.85rem;
     }
+    
+    #toggle-locked-dreams:checked + .toggle-icon-wrapper {
+        color: var(--sys-blue) !important;
+    }
+
+    .kanban-board {
+        padding: 0.5rem;
+        gap: 1rem;
+        min-height: 400px;
+    }
+
+    .kanban-column {
+        padding: 0.5rem;
+    }
+    
+    .kanban-column-header {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .kanban-card-list {
+        padding: 0.4rem;
+        gap: 0.4rem;
+    }
+
+    .kanban-card {
+        padding: 0.5rem 0.6rem;
+    }
+
+    .kanban-card .card-text {
+        font-size: 0.8rem;
+        line-height: 1.3;
+    }
+
+    .kanban-card .card-top input[type="checkbox"] {
+        transform: scale(1.0);
+    }
+
+    .kanban-card .card-badges {
+        margin-top: 0.3rem;
+    }
+
+    .kanban-card .card-badge {
+        font-size: 0.65rem;
+        padding: 0.1rem 0.35rem;
+    }
 
     .dreams-section > div:first-child,
     .books-section > div:first-child {

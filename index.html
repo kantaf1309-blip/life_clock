@@ -137,14 +137,19 @@
                     </section>
 
                     <section class="dreams-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div style="display: none;">
                             <h2 class="section-title">GOALS & DREAMS <span class="ja-subtitle">目標・夢リスト</span></h2>
                             <button id="add-dream-btn" class="primary-btn">＋ 新しい目標</button>
                         </div>
-                            <div class="dream-controls" style="display: flex; gap: 10px; align-items: center; margin-bottom: 2rem;">
-                                <label style="font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                                    <input type="checkbox" id="toggle-locked-dreams" checked>
-                                    🔒 ロック中を隠す
+                            <div class="dream-controls" style="display: flex; justify-content: flex-end; padding: 0 1rem; margin-top: -1rem; margin-bottom: 0.5rem;">
+                                <label title="ロック項目の表示切替" style="cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                    <input type="checkbox" id="toggle-locked-dreams" checked style="display: none;">
+                                    <div class="toggle-icon-wrapper" style="color: var(--text-secondary); display: flex;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+                                    </div>
                                 </label>
                             </div>
 
