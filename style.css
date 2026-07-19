@@ -2457,16 +2457,39 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 3. Kanban & Books Grid --- */
     .kanban-board {
-        padding: 0 0.5rem 1rem;
+        padding: 0 0 1rem;
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 1.5rem;
     }
     
     .kanban-column {
         min-width: 100%;
         max-width: 100%;
-        scroll-snap-align: center;
-        padding: 0.5rem;
+        scroll-snap-align: start;
+        padding: 0;
+        background: transparent;
+        border: none;
+        backdrop-filter: none;
+    }
+    
+    .kanban-column-header {
+        padding: 0 1rem 0.5rem;
+        border-bottom: none;
+    }
+
+    .kanban-list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 0.8rem;
+        padding: 0 1rem 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .kanban-list::-webkit-scrollbar {
+        display: none;
     }
     
     .bookshelf-grid {
@@ -2590,9 +2613,14 @@ details.completed-dreams-accordion .kanban-list {
 
     /* Shrink Dream Cards on Mobile */
     .dream-card {
-        padding: 0.6rem !important;
-        margin-bottom: 0.5rem !important;
-        border-radius: 8px !important;
+        flex: 0 0 45vw !important;
+        scroll-snap-align: start;
+        padding: 0.8rem !important;
+        margin-bottom: 0 !important;
+        border-radius: 12px !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .dream-card-content {
