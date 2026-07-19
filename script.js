@@ -371,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveHabits() {
         localStorage.setItem(HABIT_KEY, JSON.stringify(habits));
         localStorage.setItem(HABIT_LOG_KEY, JSON.stringify(habitLogs));
+        if (window.syncToCloud) window.syncToCloud();
     }
 
     function getDreamProgress(dreamId) {
@@ -447,7 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const kanbanBoard = document.getElementById('kanban-board');
     let dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
 
-    function saveDreams() { localStorage.setItem('lifeClockDreams', JSON.stringify(dreams)); }
+    function saveDreams() { 
+        localStorage.setItem('lifeClockDreams', JSON.stringify(dreams)); 
+        if (window.syncToCloud) window.syncToCloud();
+    }
 
     function renderKanban() {
         if(!kanbanBoard) return;
@@ -999,7 +1003,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Books Management
     // ============================================================
     let books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
-    function saveBooks() { localStorage.setItem('lifeClockBooks', JSON.stringify(books)); }
+    function saveBooks() { 
+        localStorage.setItem('lifeClockBooks', JSON.stringify(books)); 
+        if (window.syncToCloud) window.syncToCloud();
+    }
     
     let currentBookTab = 'reading';
     let currentBookGenre = 'all';
@@ -1420,5 +1427,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (changed) { saveBooks(); renderBooks(); }
     }, 2000);
+
+    // Global refresh function for cloud sync
+    window.refreshAllData = function() {
+        habits = JSON.parse(localStorage.getItem(HABIT_KEY)) || [];
+        habitLogs = JSON.parse(localStorage.getItem(HABIT_LOG_KEY)) || {};
+        dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
+        books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
+        
+        renderKanban();
+        renderHabits();
+        renderBooks();
+    };
 
 });
