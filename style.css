@@ -2588,6 +2588,43 @@ details.completed-dreams-accordion .kanban-list {
         padding: 0.1rem 0.35rem;
     }
 
+    /* Shrink Dream Cards on Mobile */
+    .dream-card {
+        padding: 0.6rem !important;
+        margin-bottom: 0.5rem !important;
+        border-radius: 8px !important;
+    }
+
+    .dream-card-content {
+        margin-bottom: 0.2rem !important;
+    }
+
+    .dream-card-title {
+        font-size: 0.85rem !important;
+        margin-bottom: 0.1rem !important;
+    }
+    
+    .dream-target-date {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    .dream-actions {
+        padding-top: 0.3rem !important;
+        gap: 0.5rem !important;
+    }
+
+    .icon-btn {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .dream-text {
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+
     .dreams-section > div:first-child,
     .books-section > div:first-child {
         margin-bottom: 0.5rem !important;
