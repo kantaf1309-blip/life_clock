@@ -280,24 +280,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Category definitions (Kanban Board)
     const CATEGORIES = {
-        career:        { label: '💼 仕事・キャリア',     color: 'var(--cat-career)' },
-        wealth:        { label: '💰 財産・資産',         color: 'var(--cat-wealth)' },
-        health:        { label: '💪 健康・身体',         color: 'var(--cat-health)' },
-        growth:        { label: '📚 学び・知性',         color: 'var(--cat-growth)' },
-        family:        { label: '🤝 家族・人間関係',     color: 'var(--cat-family)' },
-        hobbies:       { label: '🎨 趣味・遊び',         color: 'var(--cat-hobbies)' },
-        mind:          { label: '🧘 心・精神性',         color: 'var(--cat-mind)' },
-        uncategorized: { label: '📌 未分類',             color: 'var(--cat-uncategorized)' }
+        career:        { label: '仕事・キャリア',     icon: 'business_center',        color: 'var(--cat-career)' },
+        wealth:        { label: '財産・資産',         icon: 'account_balance_wallet', color: 'var(--cat-wealth)' },
+        health:        { label: '健康・身体',         icon: 'fitness_center',         color: 'var(--cat-health)' },
+        growth:        { label: '学び・知性',         icon: 'school',                 color: 'var(--cat-growth)' },
+        family:        { label: '家族・人間関係',     icon: 'diversity_3',            color: 'var(--cat-family)' },
+        hobbies:       { label: '趣味・遊び',         icon: 'palette',                color: 'var(--cat-hobbies)' },
+        mind:          { label: '心・精神性',         icon: 'self_improvement',       color: 'var(--cat-mind)' },
+        uncategorized: { label: '未分類',             icon: 'folder',                 color: 'var(--cat-uncategorized)' }
     };
 
     // Column order for kanban (uncategorized last)
     const COLUMN_ORDER = ['career', 'wealth', 'health', 'growth', 'family', 'hobbies', 'mind', 'uncategorized'];
-
-    const CAT_ICONS = {
-        career: '💼', wealth: '💰', health: '💪', 
-        growth: '📚', family: '🤝', hobbies: '🎨', mind: '🧘',
-        uncategorized: '📌'
-    };
 
     // Global Data
     const HABIT_KEY = 'lifeClockHabits';
@@ -431,10 +425,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Update Top Nav Title
                             const titleEl = document.getElementById('nav-title');
                             if (titleEl) {
-                                if (activeId === 'time-view') titleEl.textContent = 'ホーム';
-                                else if (activeId === 'dreams-view') titleEl.textContent = '目標リスト';
-                                else if (activeId === 'dwmy-view') titleEl.textContent = '習慣・日課';
-                                else if (activeId === 'books-view') titleEl.textContent = '読書リスト';
+                                if (activeId === 'time-view') titleEl.textContent = 'TIME CLOCK';
+                                else if (activeId === 'dreams-view') titleEl.textContent = 'TARGET';
+                                else if (activeId === 'dwmy-view') titleEl.textContent = 'ROUTINE';
+                                else if (activeId === 'books-view') titleEl.textContent = 'BOOKS';
                             }
                         } else {
                             b.classList.remove('active');
@@ -485,14 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
             col.setAttribute('data-category', catKey);
             col.innerHTML = `
                 <div class="kanban-column-header">
+                    <span class="material-icons" style="color: ${cat.color}; font-size: 1.1rem;">${cat.icon}</span>
                     <span class="kanban-column-title" style="color: ${cat.color};">${cat.label}</span>
+                    <span class="col-count">0</span>
                 </div>
                 <div class="kanban-list active-list"></div>
-                <button class="add-dream-in-col-btn" data-category="${catKey}" style="margin-top: 1rem; width: 100%; padding: 0.8rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">＋ 新しい目標を追加</button>
-                <details class="completed-dreams-accordion">
-                    <summary>完了済みを表示</summary>
-                    <div class="kanban-list completed-list"></div>
-                </details>
             `;
             kanbanBoard.appendChild(col);
             
@@ -551,9 +542,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Helper function to sort dreams by targetDate (earliest first, no date at the end)
-        const sortByDate = (arr) => {
+        // Sort by completion status first (completed at the back), then by date
+        const sortGoals = (arr) => {
             return arr.sort((a, b) => {
+                if (a.completed && !b.completed) return 1;
+                if (!a.completed && b.completed) return -1;
+                
                 const dateA = a.targetDate || "9999-12";
                 const dateB = b.targetDate || "9999-12";
                 return dateA.localeCompare(dateB);
@@ -562,13 +556,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hierarchical sorting
         const sortedDreams = [];
-        const topLevel = sortByDate(dreams.filter(d => !d.dependsOn));
+        const topLevel = sortGoals(dreams.filter(d => !d.dependsOn));
         const children = dreams.filter(d => d.dependsOn);
         
         // Push top level, then its children right after it
         topLevel.forEach(parent => {
             sortedDreams.push(parent);
-            const myChildren = sortByDate(children.filter(c => c.dependsOn === parent.id));
+            const myChildren = sortGoals(children.filter(c => c.dependsOn === parent.id));
             sortedDreams.push(...myChildren);
         });
         
@@ -576,12 +570,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const orphans = children.filter(c => {
             return !topLevel.find(p => p.id === c.dependsOn) && !sortedDreams.find(sd => sd.id === c.id);
         });
-        sortedDreams.push(...sortByDate(orphans));
+        sortedDreams.push(...sortGoals(orphans));
 
         sortedDreams.forEach(dream => {
             const col = document.querySelector(`.kanban-column[data-category="${dream.category || 'uncategorized'}"]`);
             if (!col) return;
-            const targetList = dream.completed ? col.querySelector('.completed-list') : col.querySelector('.active-list');
+            const targetList = col.querySelector('.active-list');
             if (targetList) {
                 const card = document.createElement('div');
                 card.className = 'dream-card';
@@ -631,14 +625,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 card.innerHTML = `
                     ${imageHtml}
-                    <div class="dream-card-content">
+                    <div class="dream-card-content" style="display: flex; gap: 0.5rem; align-items: flex-start; flex: 1;">
                         <label class="checkbox-container">
                             <input type="checkbox" class="dream-check" data-id="${dream.id}" ${dream.completed ? 'checked' : ''} ${dream.isLocked ? 'disabled' : ''}>
                             <span class="checkmark"></span>
                         </label>
-                        <span class="dream-text ${dream.completed ? 'completed-text' : ''}">${escapeHTML(dream.text)}</span>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <span class="dream-text ${dream.completed ? 'completed-text' : ''}">${escapeHTML(dream.text)}</span>
+                            ${dream.targetDate ? `<div class="dream-target-date" style="font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px;"><span class="material-icons" style="font-size: 0.85rem;">flag</span>${escapeHTML(dream.targetDate)}</div>` : ''}
+                        </div>
                     </div>
-                    ${dream.targetDate ? `<div class="dream-target-date">🎯 ${escapeHTML(dream.targetDate)}</div>` : ''}
                     <div class="dream-actions">
                         <button class="icon-btn edit-dream-btn" data-id="${dream.id}">${ICON_EDIT}</button>
                         <button class="icon-btn delete-dream-btn" data-id="${dream.id}">${ICON_DELETE}</button>
@@ -855,40 +851,66 @@ document.addEventListener('DOMContentLoaded', () => {
             const dream = dreams.find(d => d.id === habit.dreamId);
             if (!dream || dream.completed || dream.isLocked) return;
             totalActiveHabits++;
-
+            
             const isDoneToday = habitLogs[todayStr] && habitLogs[todayStr][habit.id];
             if (isDoneToday) completedToday++;
             
             const streak = getStreak(habit.id);
+
+            // Generate 5 days (4 days ago to today)
+            const days = [];
+            for (let i = 4; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const dStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                days.push({ dateStr: dStr, label: d.getDate(), isToday: i === 0 });
+            }
+
+            let daysHtml = '<div class="habit-days-group">';
+            days.forEach(day => {
+                const isDone = habitLogs[day.dateStr] && habitLogs[day.dateStr][habit.id];
+                daysHtml += `
+                    <button class="habit-day-btn ${isDone ? 'checked' : ''} ${day.isToday ? 'today' : ''}" 
+                            data-date="${day.dateStr}">
+                        ${day.label}
+                    </button>
+                `;
+            });
+            daysHtml += '</div>';
 
             const item = document.createElement('div');
             item.className = 'habit-item-ios';
             item.innerHTML = `
                 <div class="habit-info-ios">
                     <div class="habit-title-ios">${escapeHTML(habit.text)}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 3px; display: flex; align-items: center; gap: 4px;">
+                        <span class="material-icons" style="font-size: 0.8rem;">flag</span>
+                        ${escapeHTML(dream.text)}
+                    </div>
                     ${streak > 0 ? `<div class="habit-streak">🔥 ${streak}日連続</div>` : ''}
                 </div>
-                <button class="habit-check-btn ${isDoneToday ? 'checked' : ''}" data-id="${habit.id}"></button>
+                ${daysHtml}
             `;
             
-            const checkBtn = item.querySelector('.habit-check-btn');
-            checkBtn.addEventListener('click', () => {
-                if (!habitLogs[todayStr]) habitLogs[todayStr] = {};
-                
-                if (habitLogs[todayStr][habit.id]) {
-                    delete habitLogs[todayStr][habit.id];
-                    checkBtn.classList.remove('checked');
-                } else {
-                    habitLogs[todayStr][habit.id] = true;
-                    checkBtn.classList.add('checked');
-                    // Add a tiny bounce animation to the item
-                    item.style.transform = 'scale(0.97)';
-                    setTimeout(() => item.style.transform = 'scale(1)', 150);
-                }
-                
-                // Re-render ring immediately without full re-render for smooth UX
-                updateRing();
-                saveHabits();
+            const dayBtns = item.querySelectorAll('.habit-day-btn');
+            dayBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent opening edit modal
+                    const dateStr = btn.getAttribute('data-date');
+                    if (!habitLogs[dateStr]) habitLogs[dateStr] = {};
+                    
+                    if (habitLogs[dateStr][habit.id]) {
+                        delete habitLogs[dateStr][habit.id];
+                        btn.classList.remove('checked');
+                    } else {
+                        habitLogs[dateStr][habit.id] = true;
+                        btn.classList.add('checked');
+                        item.style.transform = 'scale(0.97)';
+                        setTimeout(() => item.style.transform = 'scale(1)', 150);
+                    }
+                    saveHabits();
+                    renderHabits();
+                });
             });
             
             // Add long press / double click to edit
@@ -896,6 +918,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentEditHabitId = habit.id;
                 document.getElementById('modal-habit-text').value = habit.text;
                 document.getElementById('modal-habit-dream').value = habit.dreamId;
+                if (typeof renderHabitHeatmap === 'function') {
+                    renderHabitHeatmap(habit.id);
+                }
                 openAppleModal('habit-modal');
             });
 
@@ -929,8 +954,68 @@ document.addEventListener('DOMContentLoaded', () => {
         currentEditHabitId = null;
         document.getElementById('modal-habit-text').value = '';
         document.getElementById('modal-habit-dream').value = '';
+        if (typeof renderHabitHeatmap === 'function') {
+            renderHabitHeatmap(null);
+        }
         openAppleModal('habit-modal');
     });
+
+    function renderHabitHeatmap(habitId) {
+        const container = document.getElementById('habit-heatmap-container');
+        const grid = document.getElementById('habit-heatmap-grid');
+        const stats = document.getElementById('habit-heatmap-stats');
+        if (!container || !grid || !stats) return;
+
+        if (!habitId) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+        grid.innerHTML = '';
+
+        const today = new Date();
+        let totalDone = 0;
+        
+        let col = null;
+        
+        // 364 days (52 weeks exactly)
+        for (let i = 363; i >= 0; i--) {
+            if ((363 - i) % 7 === 0) {
+                col = document.createElement('div');
+                col.style.display = 'flex';
+                col.style.flexDirection = 'column';
+                col.style.gap = '3px';
+                grid.appendChild(col);
+            }
+            
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const dStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            
+            const isDone = habitLogs[dStr] && habitLogs[dStr][habitId];
+            if (isDone) totalDone++;
+            
+            const cell = document.createElement('div');
+            cell.style.width = '12px';
+            cell.style.height = '12px';
+            cell.style.borderRadius = '2px';
+            // Use very light color or transparent with border for empty, and primary for filled
+            cell.style.backgroundColor = isDone ? 'var(--sys-blue)' : 'transparent';
+            cell.style.border = isDone ? '1px solid var(--sys-blue)' : '1px solid rgba(128, 128, 128, 0.2)';
+            cell.title = `${dStr} ${isDone ? '✅' : ''}`;
+            
+            col.appendChild(cell);
+        }
+        
+        stats.textContent = `合計: ${totalDone}日達成`;
+        
+        // Scroll to the right end (latest)
+        setTimeout(() => {
+            const wrapper = document.getElementById('habit-heatmap-wrapper');
+            if (wrapper) wrapper.scrollLeft = wrapper.scrollWidth;
+        }, 100);
+    }
     document.getElementById('habit-modal-cancel')?.addEventListener('click', () => closeAppleModal('habit-modal'));
     document.getElementById('habit-modal-save')?.addEventListener('click', () => {
         const text = document.getElementById('modal-habit-text').value.trim();
@@ -962,8 +1047,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================================
     let books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
     function saveBooks() { 
-        localStorage.setItem('lifeClockBooks', JSON.stringify(books)); 
-        if (window.syncToCloud) window.syncToCloud();
+        try {
+            localStorage.setItem('lifeClockBooks', JSON.stringify(books)); 
+            if (window.syncToCloud) window.syncToCloud();
+        } catch (e) {
+            console.error('Save failed', e);
+            if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                // Purge massive base64 images from both books and dreams to free up space
+                let purged = false;
+                books.forEach(b => {
+                    if (b.imageData && b.imageData.startsWith('data:image') && b.imageData.length > 1000) {
+                        b.imageData = '';
+                        purged = true;
+                    }
+                });
+                
+                let existingDreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
+                existingDreams.forEach(d => {
+                    if (d.imageData && d.imageData.startsWith('data:image') && d.imageData.length > 1000) {
+                        d.imageData = '';
+                        purged = true;
+                    }
+                });
+                
+                if (purged) {
+                    try {
+                        localStorage.setItem('lifeClockDreams', JSON.stringify(existingDreams));
+                        if (typeof renderKanban === 'function') {
+                            dreams = existingDreams;
+                            renderKanban();
+                        }
+                        
+                        localStorage.setItem('lifeClockBooks', JSON.stringify(books));
+                        if (window.syncToCloud) window.syncToCloud();
+                        alert('【自動修復完了】データ容量がいっぱいだったため、保存できなかった不具合を修正しました。（過去の重い表紙・目標画像を削除して容量を確保しました）。もう一度お試しください。');
+                    } catch (e2) {
+                        console.error('Still failed after purge', e2);
+                        alert('ブラウザのデータ容量が完全に一杯です。不要な目標などを削除してください。');
+                    }
+                } else {
+                    alert('ブラウザのデータ容量がいっぱいです。不要な目標や本を削除してください。');
+                }
+            }
+        }
     }
     
     let currentBookTab = 'reading';
@@ -988,11 +1114,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Global Drag and Drop for Books
+    window.dragBook = function(e, id) {
+        e.dataTransfer.setData('text/plain', id);
+        e.dataTransfer.effectAllowed = 'move';
+        e.target.style.opacity = '0.5';
+    };
+
+    window.dragBookEnd = function(e) {
+        e.target.style.opacity = '1';
+    };
+
+    window.allowDropBook = function(e) {
+        e.preventDefault();
+        e.currentTarget.classList.add('drag-over');
+    };
+
+    window.leaveDropBook = function(e) {
+        e.currentTarget.classList.remove('drag-over');
+    };
+
+    window.dropBook = function(e, targetMonth) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+        
+        const bookId = e.dataTransfer.getData('text/plain');
+        if (!bookId) return;
+
+        const book = books.find(b => b.id === bookId);
+        if (!book) return;
+
+        if (targetMonth === 'unset') {
+            book.doneDate = '';
+        } else {
+            // E.g., targetMonth is '2026-07'
+            // If the book is already in this month, don't change the exact day
+            const currentMonth = book.doneDate ? book.doneDate.substring(0, 7) : '';
+            if (currentMonth !== targetMonth) {
+                // If moving to a new month, set it to the 1st of that month
+                book.doneDate = `${targetMonth}-01`;
+            }
+        }
+        
+        saveBooks();
+        renderBooks();
+    };
+
     function renderBooks() {
+        let needsSave = false;
+        books.forEach(b => {
+            if (b.status === 'done' && b.doneDate === undefined) {
+                b.doneDate = b.targetDate || new Date().toISOString().split('T')[0];
+                needsSave = true;
+            }
+        });
+        if (needsSave) saveBooks();
+
         const grid = document.getElementById('bookshelf-grid');
         if(!grid) return;
-        grid.innerHTML = '';
-
+        
         const filteredBooks = books.filter(b => {
             const matchStatus = b.status === currentBookTab;
             const bGenre = b.genre || '未設定';
@@ -1000,9 +1180,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchStatus && matchGenre;
         });
 
-        filteredBooks.forEach(book => {
+        // Function to create a book card DOM element
+        const createBookCard = (book, isDraggable) => {
             const card = document.createElement('div');
             card.className = 'book-flip-card';
+            if (isDraggable) {
+                card.draggable = true;
+                card.setAttribute('ondragstart', `dragBook(event, '${book.id}')`);
+                card.setAttribute('ondragend', 'dragBookEnd(event)');
+            }
             card.innerHTML = `
                 <div class="book-flip-card-inner">
                     <div class="book-flip-card-front">
@@ -1019,15 +1205,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="book-flip-card-back">
                         <div class="book-back-title">${escapeHTML(book.title)}</div>
-                        <div class="book-back-author">${escapeHTML(book.author || '著者不明')}</div>
-                        
-                        <textarea class="book-back-memo-input" data-id="${book.id}" placeholder="読書メモ...">${escapeHTML(book.memo || '')}</textarea>
-                        
+                        <div class="book-back-meta" style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 0.2rem; line-height: 1.2;">
+                            ${book.doneDate ? `読了: ${book.doneDate}` : (book.targetDate ? `目標: ${book.targetDate}` : '')}
+                        </div>
+                        <textarea class="book-back-memo-input" placeholder="メモ..." data-id="${book.id}">${escapeHTML(book.memo || '')}</textarea>
                         <div class="book-back-actions">
                             <select class="book-back-select book-status-select" data-id="${book.id}">
-                                <option value="unread" ${book.status === 'unread' ? 'selected' : ''}>📚 読みたい</option>
-                                <option value="reading" ${book.status === 'reading' ? 'selected' : ''}>📖 読書中</option>
-                                <option value="done" ${book.status === 'done' ? 'selected' : ''}>✅ 読了</option>
+                                <option value="unread" ${book.status === 'unread' ? 'selected' : ''}>読みたい</option>
+                                <option value="reading" ${book.status === 'reading' ? 'selected' : ''}>読書中</option>
+                                <option value="done" ${book.status === 'done' ? 'selected' : ''}>読了</option>
                             </select>
                             <button class="book-back-btn edit-book-btn" data-id="${book.id}">編集</button>
                             <button class="book-back-btn delete-book-btn" data-id="${book.id}">削除</button>
@@ -1035,22 +1221,87 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            
-            // Flip logic
             card.addEventListener('click', (e) => {
-                if(e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'OPTION') {
+                if (e.target.tagName.toLowerCase() === 'textarea' || 
+                    e.target.tagName.toLowerCase() === 'select' || 
+                    e.target.tagName.toLowerCase() === 'button' ||
+                    e.target.tagName.toLowerCase() === 'option') {
                     return;
                 }
                 card.classList.toggle('flip-active');
             });
+            return card;
+        };
 
-            grid.appendChild(card);
-        });
+        if (currentBookTab === 'done') {
+            grid.classList.remove('bookshelf-grid');
+            // Render Kanban layout for done books
+            grid.innerHTML = '<div class="book-kanban-board" id="book-kanban-board"></div>';
+            const board = document.getElementById('book-kanban-board');
+            
+            // Group by month
+            const groups = { unset: [] };
+            filteredBooks.forEach(b => {
+                if (!b.doneDate) {
+                    groups.unset.push(b);
+                } else {
+                    const month = b.doneDate.substring(0, 7); // YYYY-MM
+                    if (!groups[month]) groups[month] = [];
+                    groups[month].push(b);
+                }
+            });
+            
+            // Sort months descending
+            const months = Object.keys(groups).filter(k => k !== 'unset').sort().reverse();
+            
+            const renderColumn = (monthKey, label, booksInColumn) => {
+                const col = document.createElement('div');
+                col.className = 'book-kanban-column';
+                col.setAttribute('ondragover', 'allowDropBook(event)');
+                col.setAttribute('ondragleave', 'leaveDropBook(event)');
+                col.setAttribute('ondrop', `dropBook(event, '${monthKey}')`);
+                
+                col.innerHTML = `
+                    <div class="book-kanban-header">${label} <span style="font-weight: normal; font-size: 0.85em; color: var(--text-secondary);">(${booksInColumn.length})</span></div>
+                    <div class="bookshelf-grid"></div>
+                `;
+                
+                const colGrid = col.querySelector('.bookshelf-grid');
+                booksInColumn.forEach(b => colGrid.appendChild(createBookCard(b, true)));
+                board.appendChild(col);
+            };
 
+            months.forEach(m => {
+                const parts = m.split('-');
+                const label = `${parts[0]}年${parseInt(parts[1], 10)}月`;
+                renderColumn(m, label, groups[m]);
+            });
+            
+            if (groups.unset.length > 0 || months.length === 0) {
+                renderColumn('unset', '未設定', groups.unset);
+            }
+            
+        } else {
+            grid.classList.add('bookshelf-grid');
+            // Normal grid layout for reading/unread
+            grid.innerHTML = '';
+            filteredBooks.forEach(book => {
+                grid.appendChild(createBookCard(book, false));
+            });
+        }
         document.querySelectorAll('.book-status-select').forEach(sel => {
             sel.addEventListener('change', (e) => {
                 const book = books.find(b => b.id === e.target.getAttribute('data-id'));
-                if(book) { book.status = e.target.value; saveBooks(); renderBooks(); }
+                if(book) { 
+                    const oldStatus = book.status;
+                    book.status = e.target.value; 
+                    if (book.status === 'done' && oldStatus !== 'done') {
+                        const d = new Date();
+                        book.doneDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                    }
+                    saveBooks(); 
+                    renderBooks(); 
+                }
             });
         });
         document.querySelectorAll('.delete-book-btn').forEach(btn => {
@@ -1078,8 +1329,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (titleEl) titleEl.value = book.title || '';
                     if (authorEl) authorEl.value = book.author || '';
                     if (genreEl) genreEl.value = book.genre || '';
-                    if (dateEl) dateEl.value = book.targetDate || '';
                     if (statusEl) statusEl.value = book.status || 'unread';
+
+                    const dateLabel = document.getElementById('book-date-label');
+                    if (dateLabel && statusEl) {
+                        dateLabel.textContent = statusEl.value === 'done' ? '読了日（任意）' : '読了目標日（任意）';
+                        if (dateEl) {
+                            dateEl.value = statusEl.value === 'done' ? (book.doneDate || '') : (book.targetDate || '');
+                        }
+                        
+                        // Replace statusEl to clear old listeners
+                        const newStatusEl = statusEl.cloneNode(true);
+                        statusEl.parentNode.replaceChild(newStatusEl, statusEl);
+                        newStatusEl.addEventListener('change', (e) => {
+                            dateLabel.textContent = e.target.value === 'done' ? '読了日（任意）' : '読了目標日（任意）';
+                        });
+                    } else if (dateEl) {
+                        dateEl.value = book.targetDate || '';
+                    }
 
                     selectedCoverUrl = '';
                     const candidatesContainer = document.getElementById('book-cover-candidates');
@@ -1106,6 +1373,129 @@ document.addEventListener('DOMContentLoaded', () => {
                 const book = books.find(b => b.id === e.target.getAttribute('data-id'));
                 if(book) { book.memo = e.target.value; saveBooks(); }
             });
+        });
+        
+        renderBooksChart();
+    }
+
+    let booksChartInstance = null;
+
+    function renderBooksChart() {
+        const chartContainer = document.getElementById('books-chart-container');
+        if (!chartContainer) return;
+
+        if (currentBookTab !== 'done') {
+            chartContainer.style.display = 'none';
+            return;
+        }
+
+        chartContainer.style.display = 'block';
+        const ctx = document.getElementById('booksChart');
+        if (!ctx) return;
+
+        const doneBooks = books.filter(b => b.status === 'done');
+        
+        if (doneBooks.length === 0) {
+            // Show empty state chart
+            if (booksChartInstance) booksChartInstance.destroy();
+            booksChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: ['今月'], datasets: [] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            suggestedMax: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'まだ読了した本がありません',
+                            color: '#888'
+                        }
+                    }
+                }
+            });
+            return;
+        }
+
+        // Group by Month (YYYY-MM) and Genre
+        const monthlyData = {};
+        const allGenres = new Set();
+
+        doneBooks.forEach(b => {
+            const month = b.doneDate.substring(0, 7); // YYYY-MM
+            const genre = b.genre || '未設定';
+            allGenres.add(genre);
+
+            if (!monthlyData[month]) monthlyData[month] = {};
+            if (!monthlyData[month][genre]) monthlyData[month][genre] = 0;
+            monthlyData[month][genre]++;
+        });
+
+        // Sort months ascending
+        const sortedMonths = Object.keys(monthlyData).sort();
+
+        // Chart.js requires datasets array
+        // Define fixed colors for genres
+        const genreColors = {
+            'すぐ実務に活かす': 'rgba(0, 122, 255, 0.8)',
+            '思考力を鍛える': 'rgba(255, 149, 0, 0.8)',
+            '教養を深める': 'rgba(88, 86, 214, 0.8)',
+            'リフレッシュ・娯楽': 'rgba(52, 199, 89, 0.8)',
+            '未設定': 'rgba(142, 142, 147, 0.8)'
+        };
+
+        const datasets = Array.from(allGenres).map(genre => {
+            return {
+                label: genre,
+                data: sortedMonths.map(m => monthlyData[m][genre] || 0),
+                backgroundColor: genreColors[genre] || 'rgba(142, 142, 147, 0.8)',
+                borderRadius: 4
+            };
+        });
+
+        if (booksChartInstance) {
+            booksChartInstance.destroy();
+        }
+
+        booksChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sortedMonths,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: "'Outfit', 'Noto Sans JP', sans-serif" },
+                            color: getComputedStyle(document.body).getPropertyValue('--text-primary').trim() || '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() || '#aaa' },
+                        grid: { display: false }
+                    },
+                    y: {
+                        stacked: true,
+                        ticks: { 
+                            stepSize: 1, 
+                            color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() || '#aaa'
+                        },
+                        grid: { color: 'rgba(128,128,128,0.1)' }
+                    }
+                }
+            }
         });
     }
 
@@ -1136,8 +1526,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Switch to iTunes Search API for eBooks to avoid Google Books 429 Quota Exceeded limits
         const apiUrl = `https://itunes.apple.com/search?term=${query}&entity=ebook&country=jp&limit=5`;
         
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
         try {
-            const data = await jsonp(apiUrl);
+            const res = await fetch(apiUrl, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (!res.ok) throw new Error('Network response was not ok');
+            const data = await res.json();
             if (!data.results) return [];
             return data.results.map(item => {
                 // iTunes returns artworkUrl100, which can be modified to request a larger image
@@ -1291,6 +1687,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dateEl) dateEl.value = '';
         if (statusEl) statusEl.value = currentBookTab;
 
+        const dateLabel = document.getElementById('book-date-label');
+        if (dateLabel && statusEl) {
+            dateLabel.textContent = statusEl.value === 'done' ? '読了日（任意）' : '読了目標日（任意）';
+            
+            // Remove old listener to avoid duplicates, then add a new one
+            const newStatusEl = statusEl.cloneNode(true);
+            statusEl.parentNode.replaceChild(newStatusEl, statusEl);
+            newStatusEl.addEventListener('change', (e) => {
+                dateLabel.textContent = e.target.value === 'done' ? '読了日（任意）' : '読了目標日（任意）';
+            });
+        }
+
         selectedCoverUrl = '';
         const candidatesContainer = document.getElementById('book-cover-candidates');
         if (candidatesContainer) candidatesContainer.style.display = 'none';
@@ -1324,8 +1732,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Convert selected cover URL to base64
         if (selectedCoverUrl) {
-            imageData = await imageUrlToBase64(selectedCoverUrl);
-            if (!imageData) imageData = selectedCoverUrl;
+            imageData = selectedCoverUrl;
         } else if (editingBook) {
             // Keep existing image if no new cover was selected
             imageData = editingBook.imageData;
@@ -1336,31 +1743,45 @@ document.addEventListener('DOMContentLoaded', () => {
             const candidates = await fetchBookCandidates(title, author);
             if (candidates.length > 0) {
                 const url = candidates[0].thumbnail.replace('http:', 'https:');
-                imageData = await imageUrlToBase64(url);
-                if (!imageData) imageData = url;
+                imageData = url;
                 if (!author && candidates[0].authors.length > 0) {
                     author = candidates[0].authors[0];
                 }
             }
         }
 
+        const today = new Date();
+        const todayStrForBook = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        
+        let finalTargetDate = '';
+        let finalDoneDate = undefined;
+        if (status === 'done') {
+            finalDoneDate = targetDate || todayStrForBook; // targetDate variable holds the input value
+            finalTargetDate = editingBook ? editingBook.targetDate : '';
+        } else {
+            finalTargetDate = targetDate; // targetDate variable holds the input value
+            finalDoneDate = undefined;
+        }
+
         if (editingBook) {
             editingBook.title = title;
             editingBook.author = author;
             editingBook.genre = genre;
-            editingBook.targetDate = targetDate;
+            editingBook.targetDate = finalTargetDate;
             editingBook.status = status;
             editingBook.imageData = imageData;
+            editingBook.doneDate = finalDoneDate;
         } else {
             books.push({
                 id: 'b_' + Date.now(),
                 title: title,
                 author: author,
                 genre: genre,
-                targetDate: targetDate,
+                targetDate: finalTargetDate,
                 status: status,
                 imageData: imageData,
-                memo: ''
+                memo: '',
+                doneDate: finalDoneDate
             });
         }
         
@@ -1397,21 +1818,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderKanban();
     renderHabits();
     renderBooks();
-
-    // Backfill covers for existing books that only have URLs (not base64)
-    setTimeout(async () => {
-        let changed = false;
-        for (const book of books) {
-            if (book.imageData && book.imageData.startsWith('http')) {
-                const base64 = await imageUrlToBase64(book.imageData);
-                if (base64) {
-                    book.imageData = base64;
-                    changed = true;
-                }
-            }
-        }
-        if (changed) { saveBooks(); renderBooks(); }
-    }, 2000);
 
     // Global refresh function for cloud sync
     window.refreshAllData = function() {

@@ -59,11 +59,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
 }
 
 body {
+    font-family: 'Outfit', 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
@@ -72,6 +71,9 @@ body {
     align-items: flex-start;
     padding: 80px 0 120px 0; /* Space for top nav and bottom tab */
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
 }
 
 .container {
@@ -184,6 +186,7 @@ h1 {
 }
 
 .ring-age {
+    font-family: 'Outfit', sans-serif;
     font-size: 2.8rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -199,6 +202,7 @@ h1 {
 }
 
 .ring-age-decimal {
+    font-family: 'Outfit', sans-serif;
     font-size: 0.65rem;
     font-weight: 400;
     color: var(--text-secondary);
@@ -226,6 +230,26 @@ h1 {
     margin-bottom: 1.5rem;
     position: relative;
     z-index: 1;
+}
+
+.digit-card.clock-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    min-width: 65px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.clock-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
 }
 
 .digit-card {
@@ -306,6 +330,7 @@ h1 {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     padding: 0.8rem 1.5rem;
+
     border-radius: 40px;
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -583,43 +608,23 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-board {
     display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem 1rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
-    min-height: 500px;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.2rem 0 1rem;
     width: 100%;
     box-sizing: border-box;
 }
 
-.kanban-board::-webkit-scrollbar {
-    height: 8px;
-}
-.kanban-board::-webkit-scrollbar-track {
-    background: var(--bg-card);
-    border-radius: 4px;
-}
-.kanban-board::-webkit-scrollbar-thumb {
-    background: rgba(128,128,128,0.12);
-    border-radius: 4px;
-}
-
 .kanban-column {
-    min-width: 340px;
-    max-width: 400px;
+    min-width: 100%;
+    max-width: 100%;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
+    background: transparent;
+    border: none;
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
-    scroll-snap-align: start;
+    margin-bottom: 0;
 }
 
 .kanban-column.drag-over {
@@ -627,22 +632,14 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .kanban-column-header {
-    padding: 1.5rem;
+    padding: 0.2rem 1rem 0.1rem;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.4rem;
     font-weight: 700;
     font-size: 0.95rem;
-    letter-spacing: 0.03em;
-    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.02em;
     position: relative;
-}
-
-.kanban-column-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--col-color, var(--border-color));
 }
 
 .kanban-column-header .col-count {
@@ -655,38 +652,48 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     margin-left: auto;
 }
 
-.kanban-card-list {
+.kanban-list {
     flex: 1;
-    padding: 0.8rem;
-    overflow-y: auto;
+    padding: 0.2rem 1rem 0.4rem;
+    overflow-x: auto;
+    overflow-y: hidden;
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-height: 100px;
+    flex-direction: row;
+    scroll-snap-type: x mandatory;
+    gap: 0.6rem;
+    min-height: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
-.kanban-card-list::-webkit-scrollbar {
-    width: 4px;
-}
-.kanban-card-list::-webkit-scrollbar-thumb {
-    background: rgba(128,128,128,0.12);
-    border-radius: 2px;
+.kanban-list::-webkit-scrollbar {
+    display: none;
 }
 
 .kanban-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 0.7rem 0.8rem;
-    cursor: grab;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    border-radius: 8px;
+    padding: 0.6rem;
     position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+    cursor: grab;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dream-card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+    height: auto;
 }
 
 .kanban-card:hover {
-    background: rgba(128,128,128,0.12);
+    background: rgba(128,128,128,0.05);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .kanban-card:active,
@@ -699,21 +706,23 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .kanban-card .card-top {
     display: flex;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .kanban-card .card-top input[type="checkbox"] {
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
     accent-color: var(--accent-color);
-    transform: scale(1.15);
+    transform: scale(1.1);
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .kanban-card .card-text {
     flex: 1;
-    font-size: 0.88rem;
-    line-height: 1.45;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--text-primary);
     word-break: break-word;
 }
 
@@ -725,23 +734,25 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .kanban-card .card-badges {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
     margin-top: 0.4rem;
     flex-wrap: wrap;
+    padding-left: 1.5rem; /* Indent past checkbox */
 }
 
 .kanban-card .card-badge {
-    font-size: 0.7rem;
-    padding: 0.1rem 0.45rem;
-    border-radius: 6px;
-    background: rgba(128,128,128,0.12);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(128,128,128,0.1);
+    color: var(--text-secondary);
     white-space: nowrap;
 }
 
 .kanban-card .card-actions {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 0.4rem;
+    right: 0.4rem;
     display: flex;
     gap: 0.2rem;
     opacity: 0;
@@ -753,19 +764,20 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 }
 
 .kanban-card .card-actions button {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(128, 128, 128, 0.1);
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
     padding: 0.2rem;
     border-radius: 4px;
-    font-size: 0.8rem;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .kanban-card .card-actions button:hover {
-    color: #fff;
-    background: rgba(128,128,128,0.12);
+    background: rgba(128, 128, 128, 0.2);
+    color: var(--text-primary);
 }
 
 .kanban-card .card-actions .delete-btn:hover {
@@ -918,12 +930,25 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 .dream-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    cursor: pointer;
     overflow: hidden;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    padding: 1.2rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 0.8rem;
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.dream-text {
+    font-weight: 700;
 }
 
 .dream-card:hover {
@@ -2150,19 +2175,61 @@ details.completed-dreams-accordion .kanban-list {
 /* Bookshelf & 3D Flip Card Styles           */
 /* ========================================= */
 .bookshelf-container {
-    padding: 2rem;
-    background: var(--bg-card);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
-    min-height: 400px;
     position: relative;
+    z-index: 1;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 2rem;
+    min-height: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+}
+
+.book-kanban-board {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+    min-height: 300px;
+}
+
+.book-kanban-column {
+    flex: 0 0 280px;
+    background: var(--bg-main);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.book-kanban-column.drag-over {
+    background: var(--bg-card);
+    border: 2px dashed #4facfe;
+}
+
+.book-kanban-header {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.book-kanban-column .bookshelf-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
 }
 
 .bookshelf-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 3rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 2rem 1rem;
     perspective: 1200px; /* For 3D flip */
 }
 
@@ -2272,15 +2339,20 @@ details.completed-dreams-accordion .kanban-list {
     transform: rotateY(180deg);
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding: 0.6rem;
     box-sizing: border-box;
     text-align: left;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.book-flip-card-back::-webkit-scrollbar {
+    display: none;
 }
 
 .book-back-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: bold;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
     color: var(--accent-color);
     line-height: 1.2;
     display: -webkit-box;
@@ -2290,9 +2362,9 @@ details.completed-dreams-accordion .kanban-list {
 }
 
 .book-back-author {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: var(--text-secondary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .book-back-memo-input {
@@ -2301,39 +2373,39 @@ details.completed-dreams-accordion .kanban-list {
     border: 1px solid var(--border-color);
     color: var(--text-primary);
     border-radius: 4px;
-    padding: 0.4rem;
-    font-size: 0.8rem;
+    padding: 0.3rem;
+    font-size: 0.75rem;
     resize: none;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     flex: 1;
 }
 
 .book-back-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
     margin-top: auto;
 }
 
 .book-back-select {
     width: 100%;
-    padding: 0.4rem;
+    padding: 0.2rem;
     background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: var(--text-primary);
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     outline: none;
 }
 
 .book-back-btn {
     width: 100%;
-    padding: 0.4rem;
+    padding: 0.25rem;
     background: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: var(--text-primary);
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -2459,7 +2531,7 @@ details.completed-dreams-accordion .kanban-list {
     .kanban-board {
         padding: 0 0 1rem;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 0;
     }
     
     .kanban-column {
@@ -2470,10 +2542,11 @@ details.completed-dreams-accordion .kanban-list {
         background: transparent;
         border: none;
         backdrop-filter: none;
+        margin-bottom: 0;
     }
     
     .kanban-column-header {
-        padding: 0 1rem 0.5rem;
+        padding: 0.2rem 1rem 0.1rem;
         border-bottom: none;
     }
 
@@ -2482,8 +2555,8 @@ details.completed-dreams-accordion .kanban-list {
         flex-direction: row;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 0.8rem;
-        padding: 0 1rem 0.5rem;
+        gap: 0.6rem;
+        padding: 0.2rem 1rem 0.4rem;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
@@ -2613,14 +2686,7 @@ details.completed-dreams-accordion .kanban-list {
 
     /* Shrink Dream Cards on Mobile */
     .dream-card {
-        flex: 0 0 45vw !important;
-        scroll-snap-align: start;
-        padding: 0.8rem !important;
-        margin-bottom: 0 !important;
-        border-radius: 12px !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        flex: 0 0 50vw !important;
     }
 
     .dream-card-content {
@@ -2844,6 +2910,49 @@ details.completed-dreams-accordion .kanban-list {
     border-left: 2px solid white;
     border-bottom: 2px solid white;
     transform: rotate(-45deg) translateY(-1px);
+}
+
+.habit-days-group {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.habit-day-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-family: 'Outfit', sans-serif;
+    padding: 0;
+}
+
+.habit-day-btn:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.habit-day-btn.today {
+    border-color: var(--sys-blue);
+    color: var(--sys-blue);
+}
+
+.habit-day-btn.checked {
+    background: var(--sys-blue);
+    border-color: var(--sys-blue);
+    color: #ffffff;
+}
+
+.habit-day-btn.checked:hover {
+    background: #0062cc; /* Darker blue */
 }
 
 .habit-item-ios {

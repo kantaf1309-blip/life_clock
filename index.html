@@ -7,7 +7,8 @@
     <meta name="description" content="85歳までの残り時間を可視化し、6分野の夢リスト・習慣化ToDo・未来予測で人生をマネジメント">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -34,7 +35,7 @@
 
     <nav class="nav-bar" id="top-nav-bar">
         <div class="nav-bar-leading">
-            <h1 class="nav-bar-title" id="nav-title" style="margin: 0; text-align: left; font-size: 1.4rem;">ホーム</h1>
+            <h1 class="nav-bar-title" id="nav-title" style="margin: 0; text-align: left; font-size: 1.4rem;">TIME CLOCK</h1>
         </div>
         <div class="nav-bar-trailing" style="gap: 8px;">
             <!-- 🔥 Streak Icon (Like capture) -->
@@ -202,6 +203,12 @@
                             <button id="add-book-btn" class="primary-btn" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 20px; padding: 0.8rem 1.5rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">＋ 本を登録</button>
                         </div>
 
+                        <!-- Reading Progress Chart (Shown only when 'done' is active, injected by JS) -->
+                        <div id="books-chart-container" style="display: none; margin-bottom: 2rem; background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                            <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-primary); text-align: center;">月別読了数</h3>
+                            <canvas id="booksChart" style="max-height: 250px;"></canvas>
+                        </div>
+
                         <!-- Tabs for Book Status and Filter -->
                         <div class="books-tabs" id="books-status-tabs" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
                             <div class="segmented-control">
@@ -285,11 +292,11 @@
                 <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                         <input type="radio" name="modal-goal-type" value="achievement" checked>
-                        <span>🎯 達成目標（期限あり）</span>
+                        <span><span class="material-icons" style="font-size: 1rem; vertical-align: -2px; margin-right: 2px;">flag</span>達成目標（期限あり）</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                         <input type="radio" name="modal-goal-type" value="maintenance">
-                        <span>🔄 維持目標（期限なし・習慣化）</span>
+                        <span><span class="material-icons" style="font-size: 1rem; vertical-align: -2px; margin-right: 2px;">loop</span>維持目標（期限なし）</span>
                     </label>
                 </div>
             </div>
@@ -333,9 +340,9 @@
             <div class="modal-field">
                 <label>表紙画像</label>
                 <button type="button" class="modal-btn modal-btn-secondary" id="book-cover-search-btn" style="width:100%;margin-bottom:0.5rem;">🔍 タイトルから表紙を検索</button>
-                <div id="book-cover-preview" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <div id="book-cover-candidates" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
                     <div id="book-cover-loading" style="display:none;text-align:center;padding:1rem;color:var(--text-secondary);">検索中...</div>
-                    <div id="book-cover-results" style="display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; max-width:100%;"></div>
+                    <div id="book-cover-grid" style="display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; max-width:100%;"></div>
                     <p id="book-cover-none" style="display:none;text-align:center;color:var(--text-secondary);font-size:0.85rem;padding:0.5rem 0;">表紙が見つかりませんでした</p>
                 </div>
                 <div id="book-cover-selected" style="display:none;margin-top:0.5rem;text-align:center;">
@@ -358,14 +365,14 @@
             <div class="modal-field">
                 <label>ステータス</label>
                 <select id="book-status">
-                    <option value="unread">📚 読みたい</option>
-                    <option value="reading">📖 読書中</option>
-                    <option value="completed">✅ 読了</option>
+                    <option value="unread">読みたい</option>
+                    <option value="reading">読書中</option>
+                    <option value="done">読了</option>
                 </select>
             </div>
             
             <div class="modal-field">
-                <label>読了目標日（任意）</label>
+                <label id="book-date-label">読了目標日（任意）</label>
                 <input type="date" id="book-target-date">
             </div>
             
@@ -413,6 +420,19 @@
                     <option value="">-- 目標を選択してください --</option>
                 </select>
                 <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">※ 習慣は必ず目標に紐づけて管理します。</small>
+            </div>
+
+            <!-- Heatmap Container (Shown only when editing an existing habit) -->
+            <div id="habit-heatmap-container" style="display: none; margin-top: 1.5rem; border-top: 1px dashed var(--border-color); padding-top: 1rem;">
+                <h4 style="margin-bottom: 0.8rem; color: var(--text-secondary); font-size: 0.9rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span>直近1年の記録 (52週)</span>
+                    <span id="habit-heatmap-stats" style="color: var(--text-primary); font-weight: 700;"></span>
+                </h4>
+                <div id="habit-heatmap-wrapper" style="overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <div id="habit-heatmap-grid" style="display: flex; gap: 3px; width: max-content; padding-bottom: 0.5rem;">
+                        <!-- JS injects columns here -->
+                    </div>
+                </div>
             </div>
 
             <div class="modal-actions">
