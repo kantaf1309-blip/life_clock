@@ -2427,31 +2427,21 @@ details.completed-dreams-accordion .kanban-list {
     }
 
     .clock-ring-container {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 0.5rem;
+        margin-bottom: 2rem;
     }
     
-    .ring-age {
+    .clock-luxury-complications {
+        gap: 0.8rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .comp-value {
         font-size: 1.4rem;
     }
     
-    .clock-digits-grid {
-        gap: 4px;
-        flex-wrap: nowrap;
-    }
-    
-    .digit-card {
-        min-width: 40px;
-        padding: 0.4rem 0.2rem;
-    }
-    
-    .digit-value {
-        font-size: 1rem;
-    }
-    
-    .digit-label {
-        font-size: 0.6rem;
+    .comp-divider {
+        height: 20px;
     }
 
     /* --- 2. Bottom Navigation (Tabs) --- */
@@ -2493,7 +2483,8 @@ details.completed-dreams-accordion .kanban-list {
 
     /* --- 3. Kanban & Books Grid --- */
     .kanban-board {
-        padding: 0 0 1rem;
+        padding: 0;
+        margin: 0;
         flex-direction: column;
         gap: 0;
     }
@@ -2503,14 +2494,15 @@ details.completed-dreams-accordion .kanban-list {
         max-width: 100%;
         scroll-snap-align: start;
         padding: 0;
+        margin: 0;
         background: transparent;
         border: none;
         backdrop-filter: none;
-        margin-bottom: 0;
     }
     
     .kanban-column-header {
-        padding: 0.2rem 1rem 0.1rem;
+        padding: 0 1rem;
+        margin: 0;
         border-bottom: none;
     }
 
@@ -2519,8 +2511,10 @@ details.completed-dreams-accordion .kanban-list {
         flex-direction: row;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 0.6rem;
-        padding: 0 1rem 0.2rem;
+        gap: 0.5rem;
+        padding: 0 1rem;
+        margin: 0;
+        flex: 0 0 auto; /* Prevent stretching vertically */
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
@@ -2530,7 +2524,8 @@ details.completed-dreams-accordion .kanban-list {
     }
 
     .kanban-column-footer {
-        padding: 0.2rem 1rem 0.6rem;
+        padding: 0 1rem 0.2rem;
+        margin: 0;
         border-top: none;
     }
     
@@ -2611,26 +2606,7 @@ details.completed-dreams-accordion .kanban-list {
         color: var(--sys-blue) !important;
     }
 
-    .kanban-board {
-        padding: 0.5rem;
-        gap: 1rem;
-        min-height: 400px;
-    }
-
-    .kanban-column {
-        padding: 0.5rem;
-    }
-    
-    .kanban-column-header {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
-    }
-
-    .kanban-card-list {
-        padding: 0.4rem;
-        gap: 0.4rem;
-    }
-
+    /* Removed duplicate kanban-board and kanban-column overrides to keep the tight vertical spacing */
     .kanban-card {
         padding: 0.5rem 0.6rem;
     }
