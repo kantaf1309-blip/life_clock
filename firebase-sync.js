@@ -2,7 +2,7 @@
 
 // Helper to save all data to Firestore
 window.syncToCloud = function(syncKey) {
-    if (typeof db === 'undefined' || !syncKey) return;
+    if (!window.db || !syncKey) return;
     
     // Get all local data
     const dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
@@ -10,7 +10,7 @@ window.syncToCloud = function(syncKey) {
     const habitLogs = JSON.parse(localStorage.getItem('lifeClockHabitLogs')) || {};
     const books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
 
-    db.collection('users').doc(syncKey).set({
+    window.db.collection('users').doc(syncKey).set({
         dreams: dreams,
         habits: habits,
         habitLogs: habitLogs,
@@ -27,7 +27,7 @@ window.syncToCloud = function(syncKey) {
 
 // Start listening to cloud changes
 window.startCloudSync = function(syncKey) {
-    if (typeof db === 'undefined' || !syncKey) return;
+    if (!window.db || !syncKey) return;
 
     // Remove existing listener if any
     if (window.unsubCloud) {
@@ -37,7 +37,7 @@ window.startCloudSync = function(syncKey) {
     // Flag to ignore the first snapshot if it's just local cache
     let isInitialLoad = true;
 
-    window.unsubCloud = db.collection('users').doc(syncKey).onSnapshot((docSnapshot) => {
+    window.unsubCloud = window.db.collection('users').doc(syncKey).onSnapshot((docSnapshot) => {
         if (docSnapshot.exists) {
             const data = docSnapshot.data();
             
