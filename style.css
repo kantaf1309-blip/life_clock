@@ -1835,6 +1835,14 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .kanban-board.hide-locked .dream-card.locked {
     display: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    scroll-snap-align: none !important;
 }
 
 .book-actions {
@@ -2082,27 +2090,16 @@ details.completed-dreams-accordion .kanban-list {
     margin-top: 0.5rem;
     font-weight: bold;
 }
+
 .dream-card.is-child {
-    margin-left: 24px;
+    /* In horizontal row layout, child indenting just looks like broken gaps. */
+    margin-left: 0;
     position: relative;
 }
-.dream-card.is-child::before {
-    content: '';
-    position: absolute;
-    left: -16px;
-    top: 24px;
-    width: 12px;
-    height: 2px;
-    background: var(--border-color);
-}
+/* Disable tree connector lines in horizontal layout */
+.dream-card.is-child::before,
 .dream-card.is-child::after {
-    content: '';
-    position: absolute;
-    left: -16px;
-    top: -20px; /* Connects upward to parent */
-    width: 2px;
-    height: 44px;
-    background: var(--border-color);
+    display: none;
 }
 
 .dream-card.drop-target-parent {
@@ -2486,7 +2483,7 @@ details.completed-dreams-accordion .kanban-list {
         padding: 0;
         margin: 0;
         flex-direction: column;
-        gap: 0;
+        gap: 1.5rem;
     }
     
     .kanban-column {
@@ -2520,6 +2517,15 @@ details.completed-dreams-accordion .kanban-list {
     }
 
     .kanban-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* In horizontal row, vertical child styling looks like a broken gap. Disable it. */
+    .dream-card.is-child {
+        margin-left: 0;
+    }
+    .dream-card.is-child::before,
+    .dream-card.is-child::after {
         display: none;
     }
 
