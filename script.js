@@ -201,16 +201,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const myDreams = [
             { id: 'd_k1', text: '妻の無事の出産と母子の健康を全力でサポートする', completed: false, category: 'health', targetDate: '2026-10-01', memo: '第一子誕生に向けて万全の準備を', imageData: '' },
             { id: 'd_k2', text: '汐留通勤と育児の両立のため、週2でジムに通い基礎体力をつける', completed: false, category: 'health', targetDate: '', memo: '心身のゆとりは体力から', imageData: '' },
-            { id: 'd_k3', text: '子育てと教育に関する最新の知見（非認知能力など）をアップデートし続ける', completed: false, category: 'knowledge', targetDate: '', memo: '', imageData: '' },
-            { id: 'd_k4', text: 'AI/DXの最新技術をキャッチアップし、人材業界のアップデートに活かす', completed: false, category: 'knowledge', targetDate: '', memo: '', imageData: '' },
+            { id: 'd_k3', text: '子育てと教育に関する最新の知見（非認知能力など）をアップデートし続ける', completed: false, category: 'growth', targetDate: '', memo: '', imageData: '' },
+            { id: 'd_k4', text: 'AI/DXの最新技術をキャッチアップし、人材業界のアップデートに活かす', completed: false, category: 'growth', targetDate: '', memo: '', imageData: '' },
             { id: 'd_k5', text: 'どんなに多忙でも、家族と猫の前では常に笑顔と心の余裕を持つ', completed: false, category: 'mind', targetDate: '', memo: 'イライラしない', imageData: '' },
             { id: 'd_k6', text: '「高すぎる期待値はリセットする」という経営者的な客観視を忘れない', completed: false, category: 'mind', targetDate: '', memo: '理想と現実のバランスを取る', imageData: '' },
-            { id: 'd_k7', text: '汐留の新天地でロケットスタートを切り、圧倒的な成果を出す', completed: false, category: 'work', targetDate: '2027-04-01', memo: '', imageData: '' },
-            { id: 'd_k8', text: 'クライスのCOO（AI）と共に、次世代の採用・組織コンサルティングの仕組みを創り上げる', completed: false, category: 'work', targetDate: '', memo: '', imageData: '' },
-            { id: 'd_k9', text: '新川崎（または日吉）の新居で、妻と猫と子供が笑顔で暮らせる快適な空間を作る', completed: false, category: 'private', targetDate: '2026-08-01', memo: 'QOL最優先', imageData: '' },
-            { id: 'd_k10', text: '週末は家族で公園やカフェでのんびり過ごす', completed: false, category: 'private', targetDate: '', memo: '夢見ヶ崎動物公園や二子玉川へ', imageData: '' },
-            { id: 'd_k11', text: '子供の小学校入学までに、教育環境を見据えた定住先（家）の購入資金を準備する', completed: false, category: 'money', targetDate: '2032-04-01', memo: '6年間の期限付き', imageData: '' },
-            { id: 'd_k12', text: '世帯年収とQOLの最大バランスを保ち、家族に不自由させない資産基盤を築く', completed: false, category: 'money', targetDate: '', memo: '', imageData: '' }
+            { id: 'd_k7', text: '汐留の新天地でロケットスタートを切り、圧倒的な成果を出す', completed: false, category: 'career', targetDate: '2027-04-01', memo: '', imageData: '' },
+            { id: 'd_k8', text: 'クライスのCOO（AI）と共に、次世代の採用・組織コンサルティングの仕組みを創り上げる', completed: false, category: 'career', targetDate: '', memo: '', imageData: '' },
+            { id: 'd_k9', text: '新川崎（または日吉）の新居で、妻と猫と子供が笑顔で暮らせる快適な空間を作る', completed: false, category: 'family', targetDate: '2026-08-01', memo: 'QOL最優先', imageData: '' },
+            { id: 'd_k10', text: '週末は家族で公園やカフェでのんびり過ごす', completed: false, category: 'family', targetDate: '', memo: '夢見ヶ崎動物公園や二子玉川へ', imageData: '' },
+            { id: 'd_k11', text: '子供の小学校入学までに、教育環境を見据えた定住先（家）の購入資金を準備する', completed: false, category: 'wealth', targetDate: '2032-04-01', memo: '6年間の期限付き', imageData: '' },
+            { id: 'd_k12', text: '世帯年収とQOLの最大バランスを保ち、家族に不自由させない資産基盤を築く', completed: false, category: 'wealth', targetDate: '', memo: '', imageData: '' }
         ];
         let existingDreams = JSON.parse(localStorage.getItem('lifeClockDreams'));
         if (!existingDreams) existingDreams = [];
@@ -567,7 +567,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.className = 'dream-card';
                 if(dream.completed) card.classList.add('completed');
                 if(dream.isLocked) card.classList.add('locked');
-                if(dream.dependsOn) card.classList.add('is-child');
+                // Only add is-child if parent exists and is NOT completed
+                const parentDream = dreams.find(p => p.id === dream.dependsOn);
+                if (dream.dependsOn && parentDream && !parentDream.completed) {
+                    card.classList.add('is-child');
+                }
                 
                 card.setAttribute('draggable', 'true'); // Allow dragging even if locked to change parent
                 card.setAttribute('data-id', dream.id);
@@ -626,9 +630,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="icon-btn delete-dream-btn" data-id="${dream.id}">${ICON_DELETE}</button>
                     </div>
                 `;
+                if (dream.isLocked) {
+                    const toggleLockedBtn = document.getElementById('toggle-locked-dreams');
+                    const hideLocked = toggleLockedBtn ? toggleLockedBtn.checked : true;
+                    if (hideLocked) return; // Completely skip appending to DOM to prevent Chrome layout bugs
+                }
                 targetList.appendChild(card);
             }
         });
+        
+        // Force browser layout recalculation to fix Chrome flexbox rendering glitch
+        document.querySelectorAll('.kanban-list').forEach(list => list.offsetHeight);
+        
+
 
         document.querySelectorAll('.dream-check').forEach(chk => {
             chk.addEventListener('change', (e) => {
@@ -679,6 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 board.classList.remove('hide-locked');
             }
+            renderDreams(); // Re-render to completely remove/add them from DOM
         });
     }
 
@@ -770,9 +785,38 @@ document.addEventListener('DOMContentLoaded', () => {
         if(file) {
             const reader = new FileReader();
             reader.onload = (e2) => {
-                const imgPreview = document.getElementById('modal-image-preview');
-                imgPreview.src = e2.target.result;
-                imgPreview.style.display = 'block';
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const MAX_SIZE = 800;
+                    
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Compress to JPEG with 0.7 quality to keep size small
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    const imgPreview = document.getElementById('modal-image-preview');
+                    imgPreview.src = dataUrl;
+                    imgPreview.style.display = 'block';
+                };
+                img.src = e2.target.result;
             };
             reader.readAsDataURL(file);
         }
