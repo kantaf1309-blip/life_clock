@@ -91,48 +91,64 @@
                             <!-- Circular Progress Ring -->
                             <div class="clock-ring-container">
                                 <svg class="clock-ring" viewBox="0 0 200 200" style="overflow: visible;">
-                                    <circle class="ring-bg" cx="100" cy="100" r="88" />
-                                    <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="88" />
+                                    <defs>
+                                        <linearGradient id="metal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#ffffff" />
+                                            <stop offset="20%" stop-color="#b0b5ba" />
+                                            <stop offset="50%" stop-color="#e2e6e9" />
+                                            <stop offset="80%" stop-color="#7a8086" />
+                                            <stop offset="100%" stop-color="#fdfdfd" />
+                                        </linearGradient>
+                                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feGaussianBlur stdDeviation="4" result="blur" />
+                                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                        </filter>
+                                    </defs>
+                                    <circle class="ring-bg" cx="100" cy="100" r="92" />
+                                    <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="92" filter="url(#glow)" stroke="url(#metal-gradient)" />
+                                    <circle class="ring-bezel" cx="100" cy="100" r="82" />
                                 </svg>
                                 <div class="ring-inner">
                                     <div class="ring-age" id="current-age">27</div>
-                                    <div class="ring-age-label">歳</div>
-                                    <div class="ring-age-decimal" id="current-age-decimal">.000000</div>
+                                    <div class="ring-age-decimal" id="current-age-decimal">.0000000</div>
                                 </div>
                             </div>
 
-                            <div class="clock-remaining-label">残された時間</div>
-                            <div class="clock-digits-grid" id="remaining-clock">
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-years">58</span>
-                                    <span class="digit-label">年</span>
+                            <div class="clock-luxury-complications" id="remaining-clock">
+                                <div class="comp-item">
+                                    <span class="comp-value" id="rem-years">58</span>
+                                    <span class="comp-label">YEARS</span>
                                 </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-days">184</span>
-                                    <span class="digit-label">日</span>
+                                <div class="comp-divider"></div>
+                                <div class="comp-item">
+                                    <span class="comp-value" id="rem-days">184</span>
+                                    <span class="comp-label">DAYS</span>
                                 </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-hours">03</span>
-                                    <span class="digit-label">時間</span>
+                                <div class="comp-divider"></div>
+                                <div class="comp-item">
+                                    <span class="comp-value" id="rem-hours">03</span>
+                                    <span class="comp-label">HRS</span>
                                 </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-minutes">44</span>
-                                    <span class="digit-label">分</span>
+                                <div class="comp-divider"></div>
+                                <div class="comp-item">
+                                    <span class="comp-value" id="rem-minutes">44</span>
+                                    <span class="comp-label">MIN</span>
                                 </div>
-                                <div class="digit-card">
-                                    <span class="digit-value" id="rem-seconds">15</span>
-                                    <span class="digit-label">秒</span>
+                                <div class="comp-divider"></div>
+                                <div class="comp-item">
+                                    <span class="comp-value" id="rem-seconds">15</span>
+                                    <span class="comp-label">SEC</span>
                                 </div>
                             </div>
                             
-                            <!-- Life Progress Bar -->
-                            <div class="clock-progress-container">
-                                <div class="clock-progress-bar" id="life-progress-bar"></div>
-                            </div>
-                            <div class="clock-progress-label">
-                                <span>1999年2月20日</span>
-                                <span id="life-progress-percent">31.2%</span>
-                                <span>2084年</span>
+                            <!-- Minimal Progress Footer -->
+                            <div class="clock-progress-minimal">
+                                <span class="prog-date">1999.02.20</span>
+                                <div class="prog-line">
+                                    <div class="prog-line-fill" id="life-progress-bar"></div>
+                                </div>
+                                <span class="prog-percent" id="life-progress-percent">31.2%</span>
+                                <span class="prog-date">2084</span>
                             </div>
                         </div>
                     </section>

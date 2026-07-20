@@ -111,43 +111,27 @@ h1 {
 }
 
 .life-clock-glass {
-    background: var(--bg-card);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border-radius: 28px;
-    padding: 2.5rem 2rem 1.5rem;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
     width: 100%;
     text-align: center;
     position: relative;
     overflow: hidden;
-}
-
-.life-clock-glass::before {
-    content: '';
-    position: absolute;
-    top: -60%;
-    left: -30%;
-    width: 160%;
-    height: 160%;
-    background: conic-gradient(from 180deg, rgba(255, 215, 0, 0.06), rgba(255, 120, 50, 0.04), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-    animation: clock-shimmer 12s linear infinite;
-}
-
-@keyframes clock-shimmer {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    margin-top: 2rem;
 }
 
 /* --- Circular Progress Ring --- */
 .clock-ring-container {
     position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1;
+    margin: 0 auto 3rem;
     z-index: 1;
 }
 
@@ -159,19 +143,23 @@ h1 {
 
 .ring-bg {
     fill: none;
-    stroke: var(--border-color);
-    stroke-width: 5;
+    stroke: rgba(255, 255, 255, 0.03);
+    stroke-width: 1.5;
 }
 
 .ring-fill {
     fill: none;
-    stroke: url(#ring-gradient);
-    stroke-width: 5;
-    stroke-linecap: round;
-    stroke-dasharray: 553;
-    stroke-dashoffset: 553;
+    stroke-width: 3;
+    stroke-linecap: square;
+    stroke-dasharray: 578;
+    stroke-dashoffset: 578;
     transition: stroke-dashoffset 1s ease-out;
-    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
+}
+
+.ring-bezel {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.02);
+    stroke-width: 0.5;
 }
 
 .ring-inner {
@@ -182,136 +170,112 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 1;
+    justify-content: center;
+    line-height: 1.1;
+    width: 100%;
 }
 
 .ring-age {
-    font-family: 'Outfit', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 700;
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-size: clamp(3rem, 18vw, 7rem);
+    font-weight: 300;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
-    letter-spacing: -1px;
-}
-
-.ring-age-label {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    letter-spacing: 2px;
-    margin-top: 2px;
+    letter-spacing: -2px;
 }
 
 .ring-age-decimal {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 400;
+    font-family: 'SF Mono', ui-monospace, monospace;
+    font-size: clamp(1rem, 5vw, 1.8rem);
+    font-weight: 300;
     color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
-    margin-top: 3px;
-    letter-spacing: 0.5px;
+    margin-top: 5px;
+    letter-spacing: 2px;
+    opacity: 0.7;
 }
 
-/* --- Remaining Time Label --- */
-.clock-remaining-label {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin-bottom: 0.8rem;
-    position: relative;
-    z-index: 1;
-}
-
-/* --- Digit Cards Grid --- */
-.clock-digits-grid {
+/* --- Luxury Complications --- */
+.clock-luxury-complications {
     display: flex;
     justify-content: center;
-    gap: 6px;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
     position: relative;
     z-index: 1;
 }
 
-.digit-card.clock-unit {
+.comp-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 0.8rem 1rem;
-    min-width: 65px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    gap: 0.4rem;
 }
 
-.clock-val {
-    font-family: 'Outfit', sans-serif;
+.comp-value {
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
     font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--text-primary);
-}
-
-.digit-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--bg-main);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 0.7rem 0.6rem 0.5rem;
-    min-width: 56px;
-    transition: background 0.3s ease;
-}
-
-.digit-card:hover {
-    background: var(--border-color);
-}
-
-.digit-value {
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-weight: 300;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
-    line-height: 1;
-    letter-spacing: -0.5px;
-}
-
-.digit-label {
-    font-size: 0.6rem;
-    color: var(--text-secondary);
-    margin-top: 6px;
     letter-spacing: 1px;
 }
 
-/* --- Progress Bar --- */
-.clock-progress-container {
-    height: 3px;
-    background: var(--border-color);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 0.6rem;
-    position: relative;
-    z-index: 1;
-}
-
-.clock-progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 215, 0, 0.8), rgba(255, 140, 50, 0.8));
-    width: 0%;
-    border-radius: 2px;
-    transition: width 1s ease-out;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-}
-
-.clock-progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.6rem;
+.comp-label {
+    font-size: 0.55rem;
     color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.6;
+}
+
+.comp-divider {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+/* --- Minimal Progress Footer --- */
+.clock-progress-minimal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    padding-bottom: 2rem;
+}
+
+.prog-date {
+    opacity: 0.5;
+}
+
+.prog-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
     position: relative;
-    z-index: 1;
-    font-variant-numeric: tabular-nums;
+}
+
+.prog-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    width: 0%;
+    box-shadow: 0 0 8px rgba(255,255,255,0.4);
+    transition: width 1s ease-out;
+}
+
+.prog-percent {
+    font-family: 'SF Mono', ui-monospace, monospace;
+    color: var(--text-primary);
+    opacity: 0.8;
 }
 
 /* ---------------------------------------------------- */
@@ -2556,13 +2520,18 @@ details.completed-dreams-accordion .kanban-list {
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         gap: 0.6rem;
-        padding: 0.2rem 1rem 0.4rem;
+        padding: 0 1rem 0.2rem;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
 
     .kanban-list::-webkit-scrollbar {
         display: none;
+    }
+
+    .kanban-column-footer {
+        padding: 0.2rem 1rem 0.6rem;
+        border-top: none;
     }
     
     .bookshelf-grid {

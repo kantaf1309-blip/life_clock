@@ -21,24 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const lifeProgressPercent = document.getElementById('life-progress-percent');
     const ringFill = document.getElementById('ring-fill');
 
-    // SVG ring circumference (2 * π * r where r=88)
-    const ringCircumference = 2 * Math.PI * 88;
+    // SVG ring circumference (2 * π * r where r=92)
+    const ringCircumference = 2 * Math.PI * 92;
     if (ringFill) {
         ringFill.style.strokeDasharray = ringCircumference;
-        ringFill.style.stroke = 'url(#ring-gradient)';
-    }
-
-    // Inject SVG gradient definition (must be in the SVG namespace)
-    const clockRingSvg = document.querySelector('.clock-ring');
-    if (clockRingSvg) {
-        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        defs.innerHTML = `
-            <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#FFD700" />
-                <stop offset="100%" stop-color="#FF8C32" />
-            </linearGradient>
-        `;
-        clockRingSvg.prepend(defs);
     }
 
     function updateLifeClock() {
