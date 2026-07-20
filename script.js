@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveHabits() {
         localStorage.setItem(HABIT_KEY, JSON.stringify(habits));
         localStorage.setItem(HABIT_LOG_KEY, JSON.stringify(habitLogs));
-        if (window.syncToCloud) window.syncToCloud();
+        if (typeof window.triggerCloudSync === 'function') window.triggerCloudSync();
     }
 
     function getDreamProgress(dreamId) {
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveDreams() { 
         localStorage.setItem('lifeClockDreams', JSON.stringify(dreams)); 
-        if (window.syncToCloud) window.syncToCloud();
+        if (typeof window.triggerCloudSync === 'function') window.triggerCloudSync();
     }
 
     function renderKanban() {
@@ -1035,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveBooks() { 
         try {
             localStorage.setItem('lifeClockBooks', JSON.stringify(books)); 
-            if (window.syncToCloud) window.syncToCloud();
+            if (typeof window.triggerCloudSync === 'function') window.triggerCloudSync();
         } catch (e) {
             console.error('Save failed', e);
             if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
@@ -1806,13 +1806,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBooks();
 
     // Global refresh function for cloud sync
-    window.refreshAllData = function() {
+    window.reloadAllData = function() {
+        dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
         habits = JSON.parse(localStorage.getItem(HABIT_KEY)) || [];
         habitLogs = JSON.parse(localStorage.getItem(HABIT_LOG_KEY)) || {};
-        dreams = JSON.parse(localStorage.getItem('lifeClockDreams')) || [];
         books = JSON.parse(localStorage.getItem('lifeClockBooks')) || [];
-        
-        renderKanban();
+        renderDreams();
         renderHabits();
         renderBooks();
     };

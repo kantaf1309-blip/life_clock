@@ -10,25 +10,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Firebase SDK (Compat versions for global usage in vanilla JS) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_ALc22wXE2NYMwW2ekDNOFivqb-UXgns",
+            authDomain: "time-clock-2e884.firebaseapp.com",
+            projectId: "time-clock-2e884",
+            storageBucket: "time-clock-2e884.firebasestorage.app",
+            messagingSenderId: "985020841098",
+            appId: "1:985020841098:web:6846803b305ea8a94ac173",
+            measurementId: "G-HWBFT1S0BR"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Auth Overlay -->
-    <div id="auth-overlay" style="display: flex; position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
+    <!-- Sync Overlay -->
+    <div id="sync-overlay" style="display: flex; position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
         <div style="background: var(--bg-card); padding: 3rem 2rem; border-radius: 16px; border: 1px solid var(--border-color); width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-primary);">Life Clock</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 2rem;">データ同期のためにログインしてください</p>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.5; font-size: 0.9rem;">
+                PCとスマホでデータを同期するための<br>
+                <strong>「秘密の合言葉（Sync Key）」</strong><br>
+                を決めて入力してください。<br>
+                <small style="opacity: 0.7;">※他の人に推測されにくい文字列推奨</small>
+            </p>
             
-            <form id="auth-form" style="display: flex; flex-direction: column; gap: 1rem;">
-                <input type="email" id="auth-email" placeholder="メールアドレス" style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none; font-size: 1rem;">
-                <input type="password" id="auth-password" placeholder="パスワード" style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none; font-size: 1rem;">
+            <form id="sync-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="text" id="sync-key-input" placeholder="例: kantaf1309-secret-2024" required style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none; font-size: 1rem;">
                 
                 <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button type="button" id="btn-signup" class="modal-btn modal-btn-secondary" style="flex: 1; padding: 1rem;">新規登録</button>
-                    <button type="submit" id="btn-login" class="modal-btn modal-btn-primary" style="flex: 1; padding: 1rem;">ログイン</button>
+                    <button type="submit" id="btn-sync" class="modal-btn modal-btn-primary" style="flex: 1; padding: 1rem;">保存して連携</button>
                 </div>
-                <div id="auth-error" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 0.5rem; display: none;"></div>
             </form>
         </div>
     </div>
@@ -458,7 +476,7 @@
         </div>
     </div>
 
-    <script src="supabase-sync.js"></script>
+    <script src="firebase-sync.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
