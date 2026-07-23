@@ -1050,11 +1050,12 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     padding: 1.5rem 2rem 3rem 2rem; /* Extra padding at bottom for safety */
     width: 100%;
     max-width: 600px;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
     position: relative;
-    touch-action: none; /* Prevent scroll interference while dragging sheet */
+    touch-action: pan-y; /* Allow smooth vertical scrolling on mobile */
     animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -1065,7 +1066,11 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 /* Scrollbar specific for modal if needed */
 .modal-content::-webkit-scrollbar {
-    width: 0px; /* Hide scrollbar for cleaner look but keep functionality */
+    width: 4px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
 }
 
 .modal-drag-handle {
@@ -1075,6 +1080,7 @@ input[type=range].slider::-webkit-slider-thumb:hover {
     border-radius: 3px;
     margin: 0 auto 1.5rem auto;
     cursor: grab;
+    touch-action: none; /* Drag handle retains sheet drag gesture */
 }
 .modal-drag-handle:active {
     cursor: grabbing;
@@ -1169,6 +1175,82 @@ input[type=range].slider::-webkit-slider-thumb:hover {
 
 .modal-btn-secondary:hover {
     background: var(--border-color);
+}
+
+.modal-btn-danger {
+    background: rgba(255, 59, 48, 0.12);
+    color: #ff3b30;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+}
+
+.modal-btn-danger:hover {
+    background: rgba(255, 59, 48, 0.22);
+}
+
+/* Goal Type Selector in Dream Edit Modal */
+.goal-type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+}
+
+@media (max-width: 480px) {
+    .goal-type-selector {
+        grid-template-columns: 1fr; /* Stack options on mobile to prevent overlapping */
+    }
+}
+
+.goal-type-option {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.goal-type-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.goal-type-card {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 0.9rem;
+    background: var(--bg-main);
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.goal-type-option input[type="radio"]:checked + .goal-type-card {
+    border-color: var(--accent-color);
+    background: rgba(0, 122, 255, 0.08);
+    box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.goal-type-card .material-icons {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+}
+
+.goal-type-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.goal-type-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.goal-type-sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
 }
 
 /* ---------------------------------------------------- */
@@ -2581,6 +2663,10 @@ details.completed-dreams-accordion .kanban-list {
         left: 0;
         width: 100% !important;
         max-width: 100% !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
         border-radius: 24px 24px 0 0;
         padding: 2rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 0px));
         transform: translateY(100%);
@@ -2593,6 +2679,7 @@ details.completed-dreams-accordion .kanban-list {
         border-radius: 3px;
         margin: -1rem auto 1.5rem;
         cursor: grab;
+        touch-action: none;
     }
 
     /* --- 5. Spacing Tweaks --- */
@@ -2656,13 +2743,28 @@ details.completed-dreams-accordion .kanban-list {
 
     .dream-actions {
         padding-top: 0.3rem !important;
-        gap: 0.5rem !important;
+        gap: 0.6rem !important;
+        position: relative;
+        z-index: 10;
     }
 
     .icon-btn {
-        width: 24px !important;
-        height: 24px !important;
-        font-size: 0.9rem !important;
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+        font-size: 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        touch-action: manipulation !important;
+        border-radius: 8px !important;
+        background: rgba(128, 128, 128, 0.1) !important;
+    }
+
+    .icon-btn:active {
+        background: rgba(128, 128, 128, 0.25) !important;
+        transform: scale(0.95);
     }
 
     .dream-text {
@@ -2813,6 +2915,10 @@ details.completed-dreams-accordion .kanban-list {
     transform: translateX(-50%) translateY(100%);
     width: 100% !important;
     max-width: 600px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
     border-radius: 24px 24px 0 0 !important;
     padding: 2rem 1.5rem calc(2rem + env(safe-area-inset-bottom, 20px)) !important;
     background: var(--bg-card) !important;

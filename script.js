@@ -699,7 +699,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modal
     const dreamModal = document.getElementById('dream-modal');
-    let currentEditDreamId = null;
+    let currentDragItem = null;
+let currentDragAction = null; // 'move-dream' or 'move-habit'
+
+// --- CACHE BUSTING STYLE INJECTION ---
+if (typeof document !== 'undefined' && !document.getElementById('force-style-fix')) {
+    const style = document.createElement('style');
+    style.id = 'force-style-fix';
+    style.textContent = `
+        .dream-card.is-child { margin-left: 0 !important; }
+        .dream-card.is-child::before, .dream-card.is-child::after { display: none !important; }
+    `;
+    document.head.appendChild(style);
+}
+// -------------------------------------
     
     function openDreamModal(dreamId, defaultCategory) {
         currentEditDreamId = dreamId || null;
@@ -727,6 +740,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if(memoInput) memoInput.value = dream.memo || '';
             imgPreview.src = dream.imageData || '';
             imgPreview.style.display = dream.imageData ? 'block' : 'none';
+            const deleteBtn = document.getElementById('modal-delete-btn');
+            if(deleteBtn) deleteBtn.style.display = 'block';
         } else {
             modalTitle.textContent = '新しい目標';
             textInput.value = '';
@@ -736,6 +751,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if(memoInput) memoInput.value = '';
             imgPreview.src = '';
             imgPreview.style.display = 'none';
+            const deleteBtn = document.getElementById('modal-delete-btn');
+            if(deleteBtn) deleteBtn.style.display = 'none';
         }
         imgInput.value = '';
         dreamModal.style.display = 'flex';
@@ -745,6 +762,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('add-dream-btn')?.addEventListener('click', () => openDreamModal());
     document.getElementById('modal-cancel-btn')?.addEventListener('click', closeDreamModal);
+    document.getElementById('modal-delete-btn')?.addEventListener('click', () => {
+        if (!currentEditDreamId) return;
+        if(confirm('この目標を削除しますか？紐づく習慣も削除されます。')) {
+            dreams = dreams.filter(d => d.id !== currentEditDreamId);
+            if(typeof habits !== 'undefined') {
+                habits = habits.filter(h => h.dreamId !== currentEditDreamId);
+                saveHabits();
+            }
+            saveDreams(); 
+            renderDreams(); 
+            if(typeof renderHabits === 'function') renderHabits();
+            closeDreamModal();
+        }
+    });
     document.getElementById('modal-save-btn')?.addEventListener('click', () => {
         const text = document.getElementById('modal-dream-text').value.trim();
         if(!text) { alert('目標を入力してください'); return; }

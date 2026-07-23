@@ -324,24 +324,36 @@
             </div>
             <div class="modal-field">
                 <label>目標のタイプ</label>
-                <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <div class="goal-type-selector">
+                    <label class="goal-type-option">
                         <input type="radio" name="modal-goal-type" value="achievement" checked>
-                        <span><span class="material-icons" style="font-size: 1rem; vertical-align: -2px; margin-right: 2px;">flag</span>達成目標（期限あり）</span>
+                        <div class="goal-type-card">
+                            <span class="material-icons">flag</span>
+                            <div class="goal-type-text">
+                                <span class="goal-type-title">達成目標</span>
+                                <span class="goal-type-sub">（期限あり）</span>
+                            </div>
+                        </div>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <label class="goal-type-option">
                         <input type="radio" name="modal-goal-type" value="maintenance">
-                        <span><span class="material-icons" style="font-size: 1rem; vertical-align: -2px; margin-right: 2px;">loop</span>維持目標（期限なし）</span>
+                        <div class="goal-type-card">
+                            <span class="material-icons">loop</span>
+                            <div class="goal-type-text">
+                                <span class="goal-type-title">維持目標</span>
+                                <span class="goal-type-sub">（期限なし）</span>
+                            </div>
+                        </div>
                     </label>
                 </div>
             </div>
-            <div class="form-group" id="dream-date-container">
-                <label>目標達成月（任意）</label>
+            <div class="modal-field" id="dream-date-container">
+                <label for="dream-date">目標達成月（任意）</label>
                 <input type="month" id="dream-date">
             </div>
 
-            <div class="form-group">
-                <label>メモ</label>
+            <div class="modal-field">
+                <label for="dream-memo">メモ</label>
                 <textarea id="dream-memo" rows="3" placeholder="詳細なプランや気持ちなど..."></textarea>
             </div>
             <div class="modal-field">
@@ -350,6 +362,7 @@
                 <img id="modal-image-preview" class="modal-image-preview" style="display: none;">
             </div>
             <div class="modal-actions">
+                <button type="button" class="modal-btn modal-btn-danger" id="modal-delete-btn" style="display: none;">削除</button>
                 <button type="button" class="modal-btn modal-btn-secondary" id="modal-cancel-btn">キャンセル</button>
                 <button type="button" class="modal-btn modal-btn-primary" id="modal-save-btn">保存</button>
             </div>
@@ -478,6 +491,6 @@
     </div>
 
     <script src="firebase-sync.js?v=2.1"></script>
-    <script src="script.js?v=11"></script>
+    <script src="script.js?v=12"></script>
 </body>
 </html>
