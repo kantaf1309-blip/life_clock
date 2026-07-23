@@ -675,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         saveHabits();
                     }
                     saveDreams(); 
-                    renderDreams(); 
+                    if (typeof renderKanban === 'function') renderKanban(); else renderDreams(); 
                     if(typeof renderHabits === 'function') renderHabits();
                 }
             });
@@ -700,7 +700,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Modal
     const dreamModal = document.getElementById('dream-modal');
     let currentDragItem = null;
-let currentDragAction = null; // 'move-dream' or 'move-habit'
+    let currentDragAction = null; // 'move-dream' or 'move-habit'
+    let currentEditDreamId = null;
 
 // --- CACHE BUSTING STYLE INJECTION ---
 if (typeof document !== 'undefined' && !document.getElementById('force-style-fix')) {
@@ -771,7 +772,7 @@ if (typeof document !== 'undefined' && !document.getElementById('force-style-fix
                 saveHabits();
             }
             saveDreams(); 
-            renderDreams(); 
+            if (typeof renderKanban === 'function') renderKanban(); else renderDreams(); 
             if(typeof renderHabits === 'function') renderHabits();
             closeDreamModal();
         }
