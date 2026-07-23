@@ -573,7 +573,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.classList.add('is-child');
                 }
                 
-                card.setAttribute('draggable', 'true'); // Allow dragging even if locked to change parent
+                const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+                if (!isTouchDevice) {
+                    card.setAttribute('draggable', 'true'); // Allow dragging only on desktop (HTML5 D&D doesn't work natively on iOS anyway)
+                }
                 card.setAttribute('data-id', dream.id);
                 
                 card.addEventListener('dragstart', e => { 
