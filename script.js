@@ -122,6 +122,32 @@ document.addEventListener('DOMContentLoaded', () => {
         activeModals.delete(modalId);
     };
 
+    window.customConfirm = function(message, onConfirm) {
+        const modal = document.getElementById('confirm-modal');
+        if (!modal) return;
+        const msgEl = document.getElementById('confirm-modal-message');
+        const okBtn = document.getElementById('confirm-modal-ok');
+        const cancelBtn = document.getElementById('confirm-modal-cancel');
+        
+        msgEl.textContent = message;
+        
+        const newOkBtn = okBtn.cloneNode(true);
+        okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        
+        newOkBtn.addEventListener('click', () => {
+            window.closeAppleModal('confirm-modal');
+            setTimeout(onConfirm, 50); // slight delay to allow modal close animation to start
+        });
+        
+        newCancelBtn.addEventListener('click', () => {
+            window.closeAppleModal('confirm-modal');
+        });
+        
+        window.openAppleModal('confirm-modal');
+    };
+
     // Global modal drag setup for Apple Design
     document.querySelectorAll('.modal-overlay').forEach(modal => {
         modal.addEventListener('click', (e) => {
@@ -670,8 +696,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.querySelectorAll('.delete-dream-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if(confirm('この目標を削除しますか？紐づく習慣も削除されます。')) {
-                    const id = e.currentTarget.getAttribute('data-id');
+                const id = e.currentTarget.getAttribute('data-id');
+                window.customConfirm('この目標を削除しますか？紐づく習慣も削除されます。', () => {
                     dreams = dreams.filter(d => d.id !== id);
                     if(typeof habits !== 'undefined') {
                         habits = habits.filter(h => h.dreamId !== id);
@@ -680,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveDreams(); 
                     if (typeof renderKanban === 'function') renderKanban(); else renderDreams(); 
                     if(typeof renderHabits === 'function') renderHabits();
-                }
+                });
             });
         });
         
@@ -768,7 +794,7 @@ if (typeof document !== 'undefined' && !document.getElementById('force-style-fix
     document.getElementById('modal-cancel-btn')?.addEventListener('click', closeDreamModal);
     document.getElementById('modal-delete-btn')?.addEventListener('click', () => {
         if (!currentEditDreamId) return;
-        if(confirm('この目標を削除しますか？紐づく習慣も削除されます。')) {
+        window.customConfirm('この目標を削除しますか？紐づく習慣も削除されます。', () => {
             dreams = dreams.filter(d => d.id !== currentEditDreamId);
             if(typeof habits !== 'undefined') {
                 habits = habits.filter(h => h.dreamId !== currentEditDreamId);
@@ -778,7 +804,7 @@ if (typeof document !== 'undefined' && !document.getElementById('force-style-fix
             if (typeof renderKanban === 'function') renderKanban(); else renderDreams(); 
             if(typeof renderHabits === 'function') renderHabits();
             closeDreamModal();
-        }
+        });
     });
     document.getElementById('modal-save-btn')?.addEventListener('click', () => {
         const text = document.getElementById('modal-dream-text').value.trim();
@@ -1371,10 +1397,11 @@ if (typeof document !== 'undefined' && !document.getElementById('force-style-fix
         });
         document.querySelectorAll('.delete-book-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if(confirm('削除しますか？')) {
-                    books = books.filter(b => b.id !== e.currentTarget.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
+                window.customConfirm('削除しますか？', () => {
+                    books = books.filter(b => b.id !== id);
                     saveBooks(); renderBooks();
-                }
+                });
             });
         });
         document.querySelectorAll('.edit-book-btn').forEach(btn => {

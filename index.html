@@ -490,7 +490,20 @@
         </div>
     </div>
 
+    <!-- Custom Confirm Modal -->
+    <div class="modal-overlay" id="confirm-modal" style="display: none;">
+        <div class="modal-content" style="max-height: 50vh; border-radius: 24px 24px 0 0; padding: 2rem 1.5rem; transform: translateY(100%); text-align: center;">
+            <div class="modal-drag-handle"></div>
+            <h2 id="confirm-modal-title" style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-primary);">確認</h2>
+            <p id="confirm-modal-message" style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem;"></p>
+            <div class="modal-actions" style="flex-direction: column; gap: 0.8rem;">
+                <button type="button" class="modal-btn modal-btn-danger" id="confirm-modal-ok">はい</button>
+                <button type="button" class="modal-btn modal-btn-secondary" id="confirm-modal-cancel">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
     <script src="firebase-sync.js?v=2.1"></script>
-    <script src="script.js?v=14"></script>
+    <script src="script.js?v=15"></script>
 </body>
 </html>
